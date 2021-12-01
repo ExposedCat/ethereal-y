@@ -1,4 +1,4 @@
-const token = `2126230117:AAGQW2S1rCx_ZRtSMlqOSdjPfeDRuyM-klo`
+const token = process.env.TOKEN
 const databaseName = `ethereal-db`
 
 
