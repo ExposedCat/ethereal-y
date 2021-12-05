@@ -12,6 +12,7 @@ const texts = {
         unknownCommand: 'Unknown command',
         invalidSyntax: 'Invalid syntax',
         noReply: 'Reply message is not specified',
+        regexpError: error => `RegExp error: ${error}`
     },
     buttons: {
         settings: 'Settings'

@@ -40,15 +40,15 @@ async function handleTextMessage(ctx) {
                 await ctx.text(texts.errors.noReply)
                 return
             }
-            const response = await regexpReplace(ctx, text)
-            switch (response) {
-                case errors.regexpReplace.invalidSyntax: {
+            const { error, data } = await regexpReplace(rawData, reply.text)
+            if (error) {
+                if (data === errors.regexpReplace.invalidSyntax) {
                     await ctx.text(texts.errors.invalidSyntax)
-                    break
+                } else {
+                    await ctx.text(texts.errors.regexpError(data))
                 }
-                default: {
-                    await ctx.text(response)
-                }
+            } else {
+                await ctx.text(data)
             }
             break
         }
