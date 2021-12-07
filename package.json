@@ -15,6 +15,7 @@
     "license": "GPL-3.0-or-later",
     "dependencies": {
         "mongoose": "^6.0.8",
+        "node-schedule": "^2.1.0",
         "telegraf": "^4.4.2"
     },
     "type": "module"

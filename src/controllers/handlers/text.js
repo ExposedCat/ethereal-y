@@ -7,6 +7,7 @@ import { Group } from '../../entities/group.js'
 
 import { start } from '../../services/handlers/text/start.js'
 import { action } from '../../services/handlers/text/action.js'
+import { createReminder } from '../../services/handlers/text/reminder.js'
 import { regexpReplace } from '../../services/handlers/text/regexp-replace.js'
 
 
@@ -26,13 +27,19 @@ async function handleTextMessage(ctx) {
 
     switch (command) {
         case '/start': {
-            const response = await start(ctx, user)
+            const response = await start(user)
             await ctx.text(response)
             break
         }
         case '/do': {
-            const response = await action(ctx, rawData)
-            await ctx.text(response)
+            const response = await action(rawData)
+            const prefix = `${user.name}: `
+            await ctx.text(prefix + response)
+            try {
+                await ctx.deleteMessage()
+            } catch (error) {
+                // Never mind if I can't delete it
+            }
             break
         }
         case '/re': {
@@ -51,6 +58,31 @@ async function handleTextMessage(ctx) {
                 await ctx.text(data)
             }
             break
+        }
+        case '/reminder':
+        case '/cron': {
+            let parser = /^((?:.+?(?= )){5})(.+)$/
+            if (command === '/reminder') {
+                parser = /^(.+?) (?:.+? )?(\d{1,2}:\d\d) (.+)$/
+            }
+            const data = rawData.match(parser)
+            if (!data) {
+                await ctx.text(texts.errors.invalidArguments(command.slice(1)))
+            } else {
+                const [_, date, time, notification] = data
+                const reminder = await createReminder(
+                    ctx, groupId, userId, date, time, notification
+                )
+                if (reminder) {
+                    if (command === '/reminder') {
+                        await ctx.text(texts.success.reminderSet(reminder.date, reminder.time))
+                    } else {
+                        await ctx.text(texts.success.cronSet(reminder.date))
+                    }
+                } else {
+                    await ctx.text(texts.errors.invalidArguments(command.slice(1)))
+                }
+            }
         }
         default: {
             if (!isGroup) {
