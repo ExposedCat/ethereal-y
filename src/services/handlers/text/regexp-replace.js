@@ -9,7 +9,7 @@ async function regexpReplace(text, targetText) {
     if (!replacementGroups) {
         return {
             error: true,
-            data: errors.regexpReplace.invalidSyntax
+            data: errors.invalidSyntax
         }
     }
     let replaced = targetText

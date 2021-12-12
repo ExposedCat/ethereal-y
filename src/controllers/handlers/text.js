@@ -23,7 +23,9 @@ async function handleTextMessage(ctx) {
     const rawData = data.join(' ')
 
     const user = await User.getOne(userId, ctx.from.first_name)
-    const group = isGroup && await Group.getOne(chatId, ctx.chat.title)
+    const group = isGroup && await Group.getOne(
+        chatId, ctx.chat.title
+    )
 
     switch (command) {
         case '/start': {
@@ -47,9 +49,11 @@ async function handleTextMessage(ctx) {
                 await ctx.text(texts.errors.noReply)
                 return
             }
-            const { error, data } = await regexpReplace(rawData, reply.text)
+            const { error, data } = await regexpReplace(
+                rawData, reply.text
+            )
             if (error) {
-                if (data === errors.regexpReplace.invalidSyntax) {
+                if (data === errors.invalidSyntax) {
                     await ctx.text(texts.errors.invalidSyntax)
                 } else {
                     await ctx.text(texts.errors.regexpError(data))
@@ -59,17 +63,20 @@ async function handleTextMessage(ctx) {
             }
             break
         }
+        // FIXME: Move logic to service
         case '/reminder':
         case '/cron': {
             let parser = /^((?:.+?(?= )){5}) (.+)$/
             if (command === '/reminder') {
                 parser = /^(.+?) (?:.+? )?(\d{1,2}:\d\d) (.+)$/
             }
-            const data = rawData.match(parser)
-            if (!data) {
-                await ctx.text(texts.errors.invalidArguments(command.slice(1)))
+            const commandData = rawData.match(parser)
+            if (!commandData) {
+                await ctx.text(texts.errors.invalidArguments(
+                    command.slice(1)
+                ))
             } else {
-                const [_, date, time, notification] = data
+                const [_, date, time, notification] = commandData
                 const reminderData = {
                     date,
                     userId,
@@ -83,17 +90,28 @@ async function handleTextMessage(ctx) {
                 } else {
                     reminderData.notification = time
                 }
-                const reminder = await Reminder.createNew(reminderData)
-                if (reminder) {
-                    if (command === '/reminder') {
-                        await ctx.text(texts.success.reminderSet(reminder.date, reminder.time))
-                    } else {
-                        const nextInvocation = reminder.nextInvocation.toDate().toLocaleString('RU')
-                        console.log(nextInvocation)
-                        await ctx.text(texts.success.cronSet(reminder.date, nextInvocation))
-                    }
+                const { data } = await Reminder.createNew(reminderData)
+                if (data === errors.invalidDate) {
+                    await ctx.text(texts.errors.invalidDate)
+                    return
+                }
+                if (data === errors.invalidCron) {
+                    await ctx.text(texts.errors.invalidCron)
+                    return
+                }
+                if (command === '/reminder') {
+                    await ctx.text(texts.success.reminderSet(
+                        data.date, data.time
+                    ))
                 } else {
-                    await ctx.text(texts.errors.invalidArguments(command.slice(1)))
+                    const nextInvocation = data
+                        .nextInvocation
+                        .toDate()
+                        .toLocaleString('RU')
+
+                    await ctx.text(texts.success.cronSet(
+                        data.date, nextInvocation
+                    ))
                 }
             }
         }

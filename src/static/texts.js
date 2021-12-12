@@ -18,6 +18,8 @@ const texts = {
         unknownCommand: '🤔 Unknown command',
         invalidArguments: command => `🤯 Invalid arguments\n\nSyntax: ${texts.other.hints[command]}`,
         invalidSyntax: '🤯 Invalid syntax',
+        invalidDate: '🤯 Invalid date\nSpecify date in future',
+        invalidCron: '🤯 Invalid time rule\nUse crontab.guru to generate valid recurring time rule',
         noReply: '🤔 Reply message is not specified',
         regexpError: error => `🤬 RegExp error: ${error}`
     }

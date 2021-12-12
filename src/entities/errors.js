@@ -1,7 +1,7 @@
 const errors = {
-    regexpReplace: {
-        invalidSyntax: Symbol('invalidSyntax')
-    }
+    invalidSyntax: Symbol('invalidSyntax'),
+    invalidCron: Symbol('invalidCron'),
+    invalidDate: Symbol('invalidDate')
 }
 Object.freeze(errors)
 
