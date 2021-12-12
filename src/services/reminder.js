@@ -1,4 +1,4 @@
-import { compare } from '../entities/date-words.js'
+import { is } from './validator.js'
 
 
 function formDate(date, time) {
@@ -8,12 +8,12 @@ function formDate(date, time) {
             const todayDay = new Date().getDate()
             const todayMonth = new Date().getMonth()
             switch (true) {
-                case compare('today', date): {
+                case is('today', date): {
                     day = todayDay
                     month = todayMonth
                     break
                 }
-                case compare('tomorrow', date): {
+                case is('tomorrow', date): {
                     day = new Date().setDate(todayDay + 1)
                     month = new Date(day).getMonth()
                     day = new Date(day).getDate()
