@@ -6,7 +6,7 @@ const texts = {
             reminder: '<code>/reminder 31.01 12:00 Pet a loli</code>\n<code>/reminder yesterday 12:00 Pet a loli</code>'
         },
         notification: text => `🕓 Reminder: «${text}»`,
-        help: `👋 Hello!\nCreated by @ExposedCatDev\nSource code: <a href="github.com/ExposedCat/ethereal-y">OPEN</a>\nReference: <a href="github.com/ExposedCat/ethereal-y/README.md">OPEN</a>`
+        help: `👋 Hello!\nCreated by @ExposedCatDev\nSource code: <a href="https://github.com/ExposedCat/ethereal-y">OPEN</a>\nReference: <a href="https://github.com/ExposedCat/ethereal-y/blob/main/README.md">OPEN</a>`
     },
     success: {
         reminderSet: (date, time) => `✍️ You will be notified at ${date} ${time}`,
