@@ -6,12 +6,13 @@ import { User } from '../../entities/user.js'
 import { Group } from '../../entities/group.js'
 import { Reminder } from '../../entities/reminder.js'
 
+import { help } from '../../services/handlers/text/help.js'
 import { start } from '../../services/handlers/text/start.js'
 import { action } from '../../services/handlers/text/action.js'
 import { regexpReplace } from '../../services/handlers/text/regexp-replace.js'
 
 
-
+// FIXME: Split commands into separate middlewares
 async function handleTextMessage(ctx) {
     const userId = ctx.from.id
     const chatId = ctx.chat.id
@@ -33,10 +34,17 @@ async function handleTextMessage(ctx) {
             await ctx.text(response)
             break
         }
+        case '/help': {
+            const response = await help()
+            await ctx.text(response)
+            break
+        }
         case '/do': {
             const response = await action(rawData)
             const prefix = `${user.name}: `
-            await ctx.text(prefix + response)
+            await ctx.text(prefix + response, {
+                reply_to_message_id: ctx.message.message_id
+            })
             try {
                 await ctx.deleteMessage()
             } catch (error) {
