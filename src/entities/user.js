@@ -1,5 +1,6 @@
 import {
     getOneUser,
+    getUserNames,
     updateUserData
 } from '../services/database/user.js'
 import mongoose from 'mongoose'
@@ -21,6 +22,9 @@ const UserSchema = new Schema({
 class UserClass {
     static getOne(userId, name) {
         return getOneUser(User, userId, name)
+    }
+    static getNames(userIds) {
+        return getUserNames(User, userIds)
     }
     updateData(updates) {
         return updateUserData.bind(this)(User, updates)

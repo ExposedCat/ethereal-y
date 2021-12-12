@@ -34,13 +34,20 @@ async function sendReminder(Reminder) {
             this.chatId,
             texts.other.notification(this.notification)
         )
-        // TODO: Add users tagging
-        // for (let number = 0; number < this.users.length; number += 10) {
-        //     await bot.telegram.sendMessage(
-        //         this.chatId,
-        //         // UserName
-        //     )
-        // }
+        const users = await User.getNames(this.users)
+        const template = ({ userId, name }) => `<a href="tg://user?id=${userId}">@${name}</a>`
+        for (let number = 0; number < this.users.length; number += 10) {
+            const usernames = users
+                .slice(number, number + 10)
+                .map(template)
+                .join(', ')
+
+            await bot.telegram.sendMessage(
+                this.chatId,
+                usernames,
+                { parse_mode: 'HTML' }
+            )
+        }
         return true
     } catch (error) {
         console.error(error)
