@@ -4,18 +4,18 @@ import { errors } from '../../entities/errors.js'
 
 import { User } from '../../entities/user.js'
 import { Group } from '../../entities/group.js'
+import { Reminder } from '../../entities/reminder.js'
 
 import { start } from '../../services/handlers/text/start.js'
 import { action } from '../../services/handlers/text/action.js'
-import { createReminder } from '../../services/handlers/text/reminder.js'
 import { regexpReplace } from '../../services/handlers/text/regexp-replace.js'
 
 
 
 async function handleTextMessage(ctx) {
     const userId = ctx.from.id
-    const groupId = ctx.chat.id
-    const isGroup = userId !== groupId
+    const chatId = ctx.chat.id
+    const isGroup = userId !== chatId
 
     const { text } = ctx.message
     const reply = ctx.message.reply_to_message
@@ -23,7 +23,7 @@ async function handleTextMessage(ctx) {
     const rawData = data.join(' ')
 
     const user = await User.getOne(userId, ctx.from.first_name)
-    const group = isGroup && await Group.getOne(groupId, ctx.chat.title)
+    const group = isGroup && await Group.getOne(chatId, ctx.chat.title)
 
     switch (command) {
         case '/start': {
@@ -61,7 +61,7 @@ async function handleTextMessage(ctx) {
         }
         case '/reminder':
         case '/cron': {
-            let parser = /^((?:.+?(?= )){5})(.+)$/
+            let parser = /^((?:.+?(?= )){5}) (.+)$/
             if (command === '/reminder') {
                 parser = /^(.+?) (?:.+? )?(\d{1,2}:\d\d) (.+)$/
             }
@@ -70,14 +70,27 @@ async function handleTextMessage(ctx) {
                 await ctx.text(texts.errors.invalidArguments(command.slice(1)))
             } else {
                 const [_, date, time, notification] = data
-                const reminder = await createReminder(
-                    ctx, groupId, userId, date, time, notification
-                )
+                const reminderData = {
+                    date,
+                    userId,
+                    chatId,
+                    Reminder,
+                    messageId: ctx.message.message_id
+                }
+                if (notification) {
+                    reminderData.time = time
+                    reminderData.notification = notification
+                } else {
+                    reminderData.notification = time
+                }
+                const reminder = await Reminder.createNew(reminderData)
                 if (reminder) {
                     if (command === '/reminder') {
                         await ctx.text(texts.success.reminderSet(reminder.date, reminder.time))
                     } else {
-                        await ctx.text(texts.success.cronSet(reminder.date))
+                        const nextInvocation = reminder.nextInvocation.toDate().toLocaleString('RU')
+                        console.log(nextInvocation)
+                        await ctx.text(texts.success.cronSet(reminder.date, nextInvocation))
                     }
                 } else {
                     await ctx.text(texts.errors.invalidArguments(command.slice(1)))

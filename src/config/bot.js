@@ -3,7 +3,7 @@ import { Telegraf } from 'telegraf'
 async function setupBot(token) {
     console.info(`Setting up bot..`)
     const bot = new Telegraf(token)
-    bot.catch(error => console.error(error.message))
+    // bot.catch(error => console.error(error.message))
     bot.use(async (ctx, next) => {
         ctx.text = async (text, extra = {}) => {
             await bot.telegram.sendMessage(

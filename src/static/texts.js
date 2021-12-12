@@ -4,7 +4,8 @@ const texts = {
         hints: {
             cron: '<code>/cron * * * * * Pet a loli</code>',
             reminder: '<code>/reminder 31.01 12:00 Pet a loli</code>\n<code>/reminder yesterday 12:00 Pet a loli</code>'
-        }
+        },
+        notification: text => `Remainder: «${text}»`
     },
     input: {
 
@@ -12,7 +13,7 @@ const texts = {
     success: {
         groupAuthorized: title => `Group "${title}" authorized`,
         reminderSet: (date, time) => `You will be notified at ${date} ${time}`,
-        cronSet: cron => `You will be notified by time rule: ${cron}`
+        cronSet: (cron, next) => `You will be notified by time rule: ${cron}\nNext notification at: ${next}`
     },
     errors: {
         unknownCommand: 'Unknown command',
