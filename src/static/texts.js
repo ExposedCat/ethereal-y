@@ -5,7 +5,7 @@ const texts = {
             cron: '<code>/cron * * * * * Pet a loli</code>',
             reminder: '<code>/reminder 31.01 12:00 Pet a loli</code>\n<code>/reminder yesterday 12:00 Pet a loli</code>'
         },
-        notification: text => `🕓 Remainder: «${text}»`
+        notification: text => `🕓 Reminder: «${text}»`
     },
     input: {
 
