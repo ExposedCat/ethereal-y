@@ -1,4 +1,4 @@
-import { Telegraf } from 'telegraf'
+import Telegraf from 'telegraf'
 
 async function setupBot(token) {
     console.info(`Setting up bot..`)

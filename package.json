@@ -16,7 +16,7 @@
     "dependencies": {
         "mongoose": "^6.0.8",
         "node-schedule": "^2.1.0",
-        "telegraf": "^4.4.2"
+        "telegraf": "^3.39.0"
     },
     "type": "module"
 }
