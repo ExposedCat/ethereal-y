@@ -1,35 +1,22 @@
+import Markup from 'telegraf/markup.js'
 import { texts } from './texts.js'
 
 
-function basicKeyboard(keys) {
+function keyboard(keyboard, columns = 1) {
+    const inlineKeyboard = Markup.inlineKeyboard(
+        keyboard.map(key => Markup.callbackButton(...key)),
+        { columns }
+    )
     return {
-        reply_markup: {
-            keyboard: keys,
-            resize: true
-        },
-        parse_mode: 'HTML'
-    }
-}
-
-function keyboard(keys) {
-    const inlineKeys = keys.map(row => [
-        row.map(key => ({
-            text: key[0],
-            callback_data: key[1]
-        }))
-    ])
-    return {
-        reply_markup: {
-            inline_keyboard: inlineKeys
-        },
-        parse_mode: 'HTML'
+        reply_markup: inlineKeyboard
     }
 }
 
 const buttons = {
-    mainMenu: basicKeyboard([
-        ['/start']
-    ])
+    reminderSubscribtion: (reminderId, subscribersNumber = 1) => keyboard([
+        [texts.buttons.subscribeReminder(subscribersNumber), `subscribe_${reminderId}`],
+        [texts.buttons.unsubscribeReminder, `unsubscribe_${reminderId}`]
+    ], 2)
 }
 
 

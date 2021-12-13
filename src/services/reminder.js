@@ -35,7 +35,7 @@ function formDate(date, time) {
     }
     const [hours, minutes] = time.split(':')
     const year = new Date().getFullYear()
-    const newDate = new Date(year, +month, day, hours, minutes)
+    const newDate = new Date(year, month - 1, day, hours, minutes)
     return {
         error: false,
         data: newDate

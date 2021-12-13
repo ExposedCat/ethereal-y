@@ -39,14 +39,14 @@ class ReminderClass {
     static getOne(reminderId) {
         return getOneReminder(Reminder, reminderId)
     }
-    static createNew(data) {
-        return createReminder(data)
+    static createNew(data, isDateTime) {
+        return createReminder(data, isDateTime)
     }
     updateData(updates) {
         return updateReminderData.bind(this)(Reminder, updates)
     }
-    schedule() {
-        return scheduleReminder.bind(this)(Reminder)
+    schedule(isDateTime) {
+        return scheduleReminder.bind(this)(Reminder, isDateTime)
     }
     send() {
         return sendReminder.bind(this)(Reminder)
@@ -55,6 +55,5 @@ class ReminderClass {
 
 ReminderSchema.loadClass(ReminderClass)
 const Reminder = model('Reminder', ReminderSchema)
-
 
 export { Reminder }

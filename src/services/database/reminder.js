@@ -22,14 +22,12 @@ function updateReminderData(Reminder, updates) {
 
 async function sendReminder(Reminder) {
     if (!this.users.length) {
-        console.log(`No subscribed users: deleting ${this.reminderId}`)
         await Reminder.deleteOne({
             reminderId: this.reminderId
         })
         return true
     }
     try {
-        console.log(`Sending notification ${this.reminderId}`)
         await bot.telegram.sendMessage(
             this.chatId,
             texts.other.notification(this.notification)
@@ -58,16 +56,14 @@ async function sendReminder(Reminder) {
     }
 }
 
-async function scheduleReminder(Reminder) {
-    const sourceDate = JSON.parse(this.date)
-    const isDateTime = sourceDate instanceof Date
-    const date = isDateTime ? new Date(sourceDate) : sourceDate
+async function scheduleReminder(Reminder, isDateTime) {
+    let date = isDateTime ? new Date(this.date) : isDateTime
     const jobFunction = async () => {
         const reminder = await Reminder.getOne(this.reminderId)
         await reminder.send()
     }
     const job = cron.scheduleJob(date, jobFunction)
-    return { job, isDateTime }
+    return { job }
 }
 
 async function createReminder({
@@ -75,19 +71,20 @@ async function createReminder({
     chatId, userId, messageId,
     date, time,
     notification = time
-}) {
+}, isDateTime) {
     const { error, data: formedDate } = formDate(date, time)
     if (error) {
         return { error, data: formedDate }
     }
+    const stringDate = isDateTime ? formedDate.toISOString() : formedDate
     const newReminder = await Reminder.create({
         chatId,
         notification,
         users: [userId],
-        date: JSON.stringify(formedDate),
+        date: stringDate,
         reminderId: chatId + messageId
     })
-    const { job, isDateTime } = await newReminder.schedule()
+    const { job } = await newReminder.schedule(isDateTime)
     if (!job) {
         await Reminder.deleteOne({
             reminderId: newReminder.reminderId
@@ -98,6 +95,9 @@ async function createReminder({
         }
     }
     let reminderData = {
+        date: null,
+        time: void 0,
+        nextInvocation: void 0,
         reminderId: newReminder.reminderId
     }
     if (typeof formedDate === 'string') {

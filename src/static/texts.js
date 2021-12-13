@@ -20,6 +20,10 @@ const texts = {
         invalidCron: '🤯 Invalid time rule\nUse crontab.guru to generate valid recurring time rule',
         noReply: '🤔 Reply message is not specified',
         regexpError: error => `🤬 RegExp error: ${error}`
+    },
+    buttons: {
+        subscribeReminder: subscribersNumber => `➕ (${subscribersNumber})`,
+        unsubscribeReminder: `➖`
     }
 }
 

@@ -10,6 +10,7 @@ import { help } from '../../services/handlers/text/help.js'
 import { start } from '../../services/handlers/text/start.js'
 import { action } from '../../services/handlers/text/action.js'
 import { regexpReplace } from '../../services/handlers/text/regexp-replace.js'
+import { buttons } from '../../static/buttons.js'
 
 
 // FIXME: Split commands into separate middlewares
@@ -75,7 +76,8 @@ async function handleTextMessage(ctx) {
         case '/reminder':
         case '/cron': {
             let parser = /^((?:.+?(?= )){5}) (.+)$/
-            if (command === '/reminder') {
+            const isDateTime = command === '/reminder'
+            if (isDateTime) {
                 parser = /^(.+?) (?:.+? )?(\d{1,2}:\d\d) (.+)$/
             }
             const commandData = rawData.match(parser)
@@ -98,7 +100,7 @@ async function handleTextMessage(ctx) {
                 } else {
                     reminderData.notification = time
                 }
-                const { data } = await Reminder.createNew(reminderData)
+                const { data } = await Reminder.createNew(reminderData, isDateTime)
                 if (data === errors.invalidDate) {
                     await ctx.text(texts.errors.invalidDate)
                     return
@@ -107,10 +109,10 @@ async function handleTextMessage(ctx) {
                     await ctx.text(texts.errors.invalidCron)
                     return
                 }
-                if (command === '/reminder') {
+                if (isDateTime) {
                     await ctx.text(texts.success.reminderSet(
                         data.date, data.time
-                    ))
+                    ), buttons.reminderSubscribtion(data.reminderId))
                 } else {
                     const nextInvocation = data
                         .nextInvocation
