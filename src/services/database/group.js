@@ -3,13 +3,17 @@ function getOneGroup(Group, groupId, title) {
     if (title) {
         update.title = title
     }
-    return Group.findOneAndUpdate({
-        groupId
-    }, update, {
-        new: true,
-        upsert: true,
-        setDefaultsOnInsert: true
-    })
+    try {
+        return Group.findOneAndUpdate({
+            groupId
+        }, update, {
+            new: true,
+            upsert: true,
+            setDefaultsOnInsert: true
+        })
+    } catch {
+        return getOneGroup(Group, groupId, title)
+    }
 }
 
 function updateGroupData(Group, updates) {

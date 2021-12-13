@@ -1,11 +1,15 @@
-function getOneUser(User, userId, name) {
-    return User.findOneAndUpdate({
-        userId
-    }, { name }, {
-        new: true,
-        upsert: true,
-        setDefaultsOnInsert: true
-    })
+async function getOneUser(User, userId, name) {
+    try {
+        return await User.findOneAndUpdate({
+            userId
+        }, { name }, {
+            new: true,
+            upsert: true,
+            setDefaultsOnInsert: true
+        })
+    } catch {
+        return getOneUser(User, userId, name)
+    }
 }
 
 function updateUserData(User, updates) {
