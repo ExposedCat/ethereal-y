@@ -19,7 +19,8 @@ const texts = {
         invalidDate: '🤯 Invalid date\nSpecify date in future',
         invalidCron: '🤯 Invalid time rule\nUse crontab.guru to generate valid recurring time rule',
         noReply: '🤔 Reply message is not specified',
-        regexpError: error => `🤬 RegExp error: ${error}`
+        regexpError: error => `🤬 RegExp error: ${error}`,
+        messageTextIsEmpty: `😶 RegExp error: Result message text is empty`
     },
     buttons: {
         subscribeReminder: subscribersNumber => `➕ (${subscribersNumber})`,

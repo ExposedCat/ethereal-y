@@ -53,7 +53,11 @@ async function regexReplaceCommand(ctx) {
             await ctx.text(texts.errors.regexpError(data))
         }
     } else {
-        await ctx.text(data)
+        if (data) {
+            await ctx.text(data)
+        } else {
+            await ctx.text(texts.errors.messageTextIsEmpty)
+        }
     }
 }
 
