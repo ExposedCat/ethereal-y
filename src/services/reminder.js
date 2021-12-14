@@ -3,7 +3,8 @@ import { errors } from '../entities/errors.js'
 
 
 function formDate(date, time) {
-    if (!time) {
+    const [hours, minutes] = time.split(':')
+    if (!minutes) {
         return {
             error: false,
             data: date
@@ -33,14 +34,26 @@ function formDate(date, time) {
             }
         }
     }
-    const [hours, minutes] = time.split(':')
     const year = new Date().getFullYear()
-    const newDate = new Date(year, month - 1, day, hours, minutes)
+    const newDate = new Date(year, month, day, hours, minutes)
     return {
         error: false,
         data: newDate
     }
 }
 
+function parseReminderCommand(command, rawData) {
+    let parser = /^((?:.+?(?= )){5}) (.+)$/
+    const isDateTime = command === '/reminder'
+    if (isDateTime) {
+        parser = /^(.+?) (?:.+? )?(\d{1,2}:\d\d) (.+)$/
+    }
+    const commandData = rawData.match(parser)
+    return { commandData, isDateTime }
+}
 
-export { formDate }
+
+export {
+    formDate,
+    parseReminderCommand
+}

@@ -9,9 +9,16 @@ import { Reminder } from '../../entities/reminder.js'
 
 import { help } from '../../services/handlers/text/help.js'
 import { start } from '../../services/handlers/text/start.js'
+import { parseReminderCommand } from '../../services/reminder.js'
 import { action } from '../../services/handlers/text/action.js'
 import { regexpReplace } from '../../services/handlers/text/regexp-replace.js'
+import { sendTextMessage, showPopup } from '../../services/extensions/context.js'
 
+async function extendContext(ctx, next) {
+    ctx.popup = showPopup
+    ctx.text = (text, extra) => sendTextMessage(ctx, text, extra)
+    await next()
+}
 
 async function startCommand(ctx) {
     const response = await start(ctx.user)
@@ -61,58 +68,47 @@ async function regexReplaceCommand(ctx) {
     }
 }
 
-// FIXME: Move business logic to service
-async function reminderCommand(ctx) {
-    let parser = /^((?:.+?(?= )){5}) (.+)$/
-    const isDateTime = ctx.command === '/reminder'
-    if (isDateTime) {
-        parser = /^(.+?) (?:.+? )?(\d{1,2}:\d\d) (.+)$/
+async function createNotification(ctx, commandData, isDateTime) {
+    const [_, date, time, notification] = commandData
+    const reminderData = {
+        date,
+        time,
+        Reminder,
+        notification: notification || time,
+        userId: ctx.from.id,
+        chatId: ctx.chat.id,
+        messageId: ctx.message.message_id
     }
-    const commandData = ctx.rawData.match(parser)
+    const { data } = await Reminder.createNew(reminderData, isDateTime)
+    if (data === errors.invalidDate) {
+        await ctx.text(texts.errors.invalidDate)
+        return
+    }
+    if (data === errors.invalidCron) {
+        await ctx.text(texts.errors.invalidCron)
+        return
+    }
+    if (isDateTime) {
+        await ctx.text(texts.success.reminderSet(
+            data.date, data.time
+        ), buttons.reminderSubscribtion(data.reminderId))
+    } else {
+        const nextInvocation = data.nextInvocation.toLocaleString('RU')
+        await ctx.text(texts.success.cronSet(
+            data.date, nextInvocation
+        ), buttons.reminderSubscribtion(data.reminderId))
+    }
+}
+
+async function reminderCommand(ctx) {
+    const data = parseReminderCommand(ctx.command, ctx.rawData)
+    const { commandData, isDateTime } = data
     if (!commandData) {
         await ctx.text(texts.errors.invalidArguments(
             ctx.command.slice(1)
         ))
     } else {
-        const [_, date, time, notification] = commandData
-        const reminderData = {
-            date,
-            Reminder,
-            time: null,
-            notification: null,
-            userId: ctx.from.id,
-            chatId: ctx.chat.id,
-            messageId: ctx.message.message_id
-        }
-        if (notification) {
-            reminderData.time = time
-            reminderData.notification = notification
-        } else {
-            reminderData.notification = time
-        }
-        const { data } = await Reminder.createNew(reminderData, isDateTime)
-        if (data === errors.invalidDate) {
-            await ctx.text(texts.errors.invalidDate)
-            return
-        }
-        if (data === errors.invalidCron) {
-            await ctx.text(texts.errors.invalidCron)
-            return
-        }
-        if (isDateTime) {
-            await ctx.text(texts.success.reminderSet(
-                data.date, data.time
-            ), buttons.reminderSubscribtion(data.reminderId))
-        } else {
-            const nextInvocation = data
-                .nextInvocation
-                .toDate()
-                .toLocaleString('RU')
-
-            await ctx.text(texts.success.cronSet(
-                data.date, nextInvocation
-            ))
-        }
+        await createNotification(ctx, commandData, isDateTime)
     }
 }
 
@@ -142,6 +138,7 @@ export {
     helpCommand,
     startCommand,
     actionCommand,
+    extendContext,
     anyTextMessage,
     reminderCommand,
     processTextMessage,

@@ -57,7 +57,7 @@ async function sendReminder(Reminder) {
 }
 
 async function scheduleReminder(Reminder, isDateTime) {
-    let date = isDateTime ? new Date(this.date) : isDateTime
+    let date = isDateTime ? new Date(this.date) : this.date
     const jobFunction = async () => {
         const reminder = await Reminder.getOne(this.reminderId)
         await reminder.send()
@@ -70,7 +70,7 @@ async function createReminder({
     Reminder,
     chatId, userId, messageId,
     date, time,
-    notification = time
+    notification
 }, isDateTime) {
     const { error, data: formedDate } = formDate(date, time)
     if (error) {
@@ -102,7 +102,7 @@ async function createReminder({
     }
     if (typeof formedDate === 'string') {
         reminderData.date = formedDate
-        reminderData.nextInvocation = job.nextInvocation()
+        reminderData.nextInvocation = job.nextInvocation().toDate()
     } else {
         reminderData.date = formedDate.toLocaleDateString('RU')
         reminderData.time = formedDate.toLocaleTimeString('RU')
