@@ -13,9 +13,9 @@ function keyboard(keyboard, columns = 1) {
 }
 
 const buttons = {
-    reminderSubscribtion: (reminderId, subscribersNumber = 1) => keyboard([
-        [texts.buttons.subscribeReminder(subscribersNumber), `subscribe_${reminderId}`],
-        [texts.buttons.unsubscribeReminder, `unsubscribe_${reminderId}`]
+    reminderSubscription: (reminderId, subscribersNumber = 1) => keyboard([
+        [texts.buttons.subscribeReminder(subscribersNumber), `subscribe_1_${reminderId}`],
+        [texts.buttons.unsubscribeReminder, `subscribe_0_${reminderId}`]
     ], 2)
 }
 

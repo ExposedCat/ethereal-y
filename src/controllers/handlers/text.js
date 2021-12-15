@@ -91,12 +91,12 @@ async function createNotification(ctx, commandData, isDateTime) {
     if (isDateTime) {
         await ctx.text(texts.success.reminderSet(
             data.date, data.time
-        ), buttons.reminderSubscribtion(data.reminderId))
+        ), buttons.reminderSubscription(data.reminderId))
     } else {
         const nextInvocation = data.nextInvocation.toLocaleString('RU')
         await ctx.text(texts.success.cronSet(
             data.date, nextInvocation
-        ), buttons.reminderSubscribtion(data.reminderId))
+        ), buttons.reminderSubscription(data.reminderId))
     }
 }
 
