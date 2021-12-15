@@ -9,13 +9,13 @@ import { Reminder } from '../../entities/reminder.js'
 
 import { help } from '../../services/handlers/text/help.js'
 import { start } from '../../services/handlers/text/start.js'
-import { parseReminderCommand } from '../../services/reminder.js'
 import { action } from '../../services/handlers/text/action.js'
+import { sendTextMessage } from '../../services/extensions/context.js'
 import { regexpReplace } from '../../services/handlers/text/regexp-replace.js'
-import { sendTextMessage, showPopup } from '../../services/extensions/context.js'
+import { parseReminderCommand } from '../../services/handlers/text/reminder.js'
+
 
 async function extendContext(ctx, next) {
-    ctx.popup = showPopup
     ctx.text = (text, extra) => sendTextMessage(ctx, text, extra)
     await next()
 }

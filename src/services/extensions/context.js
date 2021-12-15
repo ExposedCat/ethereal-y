@@ -9,7 +9,7 @@ function sendTextMessage(ctx, text, extra = {}) {
     )
 }
 
-const showPopup = text => ctx.answerCbQuery(text, true)
+const showPopup = (ctx, text) => ctx.answerCbQuery(text, true)
 
 export {
     showPopup,

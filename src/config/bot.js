@@ -4,18 +4,20 @@ import {
     helpCommand,
     startCommand,
     actionCommand,
-    extendContext,
     anyTextMessage,
     reminderCommand,
     processTextMessage,
-    regexReplaceCommand
+    regexReplaceCommand,
+    extendContext as extendTextContext
 } from '../controllers/handlers/text.js'
-import { handleButtonClick } from '../controllers/handlers/button.js'
+import {
+    subscribeClick,
+    extendContext as extendButtonContext
+} from '../controllers/handlers/button.js'
 
 
 function setupHandlers(bot) {
-    bot.use(extendContext)
-    bot.on('callback_query', handleButtonClick)
+    bot.use(extendTextContext)
     bot.on('text', processTextMessage)
     bot.command('/do', actionCommand)
     bot.command('/help', helpCommand)
@@ -24,15 +26,18 @@ function setupHandlers(bot) {
     bot.command('/reminder', reminderCommand)
     bot.command('/cron', reminderCommand)
     bot.on('text', anyTextMessage)
+
+    bot.use(extendButtonContext)
+    bot.action(/subscribe_(\d)_(.+)/, subscribeClick)
 }
 
 function setupBot(token) {
     console.info(`Setting up bot..`)
 
     const bot = new Bot(token)
-    bot.catch(error => { throw error })
+    bot.catch(console.trace)
     setupHandlers(bot)
-    
+
     console.info(`Done`)
     return bot
 }

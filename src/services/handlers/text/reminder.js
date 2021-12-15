@@ -1,5 +1,5 @@
-import { is } from './validator.js'
-import { errors } from '../entities/errors.js'
+import { is } from '../../validator.js'
+import { errors } from '../../../entities/errors.js'
 
 
 function formDate(date, time) {

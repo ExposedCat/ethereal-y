@@ -3,9 +3,9 @@ import cron from 'node-schedule'
 import { User } from '../../entities/user.js'
 
 import { bot } from '../bot.js'
-import { formDate } from '../reminder.js'
 import { texts } from '../../static/texts.js'
 import { errors } from '../../entities/errors.js'
+import { formDate } from '../handlers/text/reminder.js'
 
 
 function getOneReminder(Reminder, reminderId) {
@@ -21,7 +21,7 @@ function updateReminderData(Reminder, updates) {
 }
 
 async function sendReminder(Reminder) {
-    if (!this.users.length) {
+    if (!this.subscribers.length) {
         await Reminder.deleteOne({
             reminderId: this.reminderId
         })
@@ -32,10 +32,11 @@ async function sendReminder(Reminder) {
             this.chatId,
             texts.other.notification(this.notification)
         )
-        const users = await User.getNames(this.users)
+        const subscribers = await User.getNames(this.subscribers)
         const template = ({ userId, name }) => `<a href="tg://user?id=${userId}">@${name}</a>`
-        for (let number = 0; number < this.users.length; number += 10) {
-            const usernames = users
+        const { length } = this.subscribers
+        for (let number = 0; number < length; number += 10) {
+            const usernames = subscribers
                 .slice(number, number + 10)
                 .map(template)
                 .join(', ')
@@ -47,8 +48,7 @@ async function sendReminder(Reminder) {
             )
         }
         return true
-    } catch (error) {
-        console.error(error)
+    } catch {
         await Reminder.deleteOne({
             reminderId: this.reminderId
         })
@@ -60,9 +60,15 @@ async function scheduleReminder(Reminder, isDateTime) {
     let date = isDateTime ? new Date(this.date) : this.date
     const jobFunction = async () => {
         const reminder = await Reminder.getOne(this.reminderId)
-        await reminder.send()
+        if (reminder) {
+            await reminder.send()
+        } else {
+            cron.cancelJob(this.reminderId).toString()
+        }
     }
-    const job = cron.scheduleJob(date, jobFunction)
+    const job = cron.scheduleJob(
+        this.reminderId.toString(), date, jobFunction
+    )
     return { job }
 }
 
@@ -80,7 +86,7 @@ async function createReminder({
     const newReminder = await Reminder.create({
         chatId,
         notification,
-        users: [userId],
+        subscribers: [userId],
         date: stringDate,
         reminderId: chatId + messageId
     })
@@ -113,11 +119,40 @@ async function createReminder({
     }
 }
 
+async function updateSubscriber(Reminder, userId, state) {
+    const method = state ? '$addToSet' : '$pull'
+    await Reminder.updateOne({
+        reminderId: this.reminderId
+    }, {
+        [method]: {
+            subscribers: userId
+        }
+    })
+    const filter = {
+        $match: {
+            reminderId: this.reminderId
+        }
+    }
+    const calculation = {
+        $project: {
+            number: {
+                $size: '$subscribers'
+            }
+        }
+    }
+    const [stats] = await Reminder.aggregate([filter, calculation])
+    return {
+        error: false,
+        data: stats.number
+    }
+}
+
 
 export {
     sendReminder,
     createReminder,
     getOneReminder,
+    updateSubscriber,
     scheduleReminder,
     updateReminderData
 }

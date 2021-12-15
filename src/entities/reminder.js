@@ -5,6 +5,7 @@ import {
     sendReminder,
     createReminder,
     getOneReminder,
+    updateSubscriber,
     scheduleReminder,
     updateReminderData
 } from '../services/database/reminder.js'
@@ -24,7 +25,7 @@ const ReminderSchema = new Schema({
         type: String,
         required: true
     },
-    users: {
+    subscribers: {
         type: [Number],
         required: true,
         default: []
@@ -41,6 +42,9 @@ class ReminderClass {
     }
     static createNew(data, isDateTime) {
         return createReminder(data, isDateTime)
+    }
+    updateSubscriber(userId, state) {
+        return updateSubscriber.bind(this)(Reminder, userId, state)
     }
     updateData(updates) {
         return updateReminderData.bind(this)(Reminder, updates)
