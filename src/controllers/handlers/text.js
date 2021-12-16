@@ -121,7 +121,10 @@ async function anyTextMessage(ctx) {
     let sent = false
     const isGroup = ctx.from.id !== ctx.chat.id
 
-    sent = isGroup && await processTrigger(ctx.chat.id, ctx.message.text)
+    sent = isGroup && await processTrigger(
+        ctx.chat.id, ctx.message.text,
+        ctx.message.message_id
+    )
     if (sent) return
 
     if (!isGroup) {
@@ -199,10 +202,11 @@ async function getTriggersCommand(ctx) {
     }
 }
 
-async function processTrigger(chatId, text) {
+async function processTrigger(chatId, text, replyMessageId) {
     const { error, data: trigger } = await triggerResponse(chatId, text)
     if (!error) {
-        return await trigger.send()
+        console.log(replyMessageId)
+        return await trigger.send(replyMessageId)
     }
     return false
 }
