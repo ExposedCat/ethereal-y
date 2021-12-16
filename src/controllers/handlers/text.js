@@ -34,9 +34,7 @@ async function actionCommand(ctx) {
     const actionMessage = await action(ctx.rawData)
     const name = ctx.from.first_name
     const message = `${name}: *${actionMessage}*`
-    await ctx.text(message, {
-        reply_to_message_id: ctx.message.message_id
-    })
+    await ctx.text(message)
     try {
         await ctx.deleteMessage()
     } catch {
