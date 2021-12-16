@@ -205,7 +205,6 @@ async function getTriggersCommand(ctx) {
 async function processTrigger(chatId, text, replyMessageId) {
     const { error, data: trigger } = await triggerResponse(chatId, text)
     if (!error) {
-        console.log(replyMessageId)
         return await trigger.send(replyMessageId)
     }
     return false
