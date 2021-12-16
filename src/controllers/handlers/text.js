@@ -7,6 +7,12 @@ import { User } from '../../entities/user.js'
 import { Group } from '../../entities/group.js'
 import { Reminder } from '../../entities/reminder.js'
 
+import {
+    addTrigger,
+    getTriggers,
+    triggerResponse,
+    removeOneTrigger
+} from '../../services/handlers/text/trigger.js'
 import { help } from '../../services/handlers/text/help.js'
 import { start } from '../../services/handlers/text/start.js'
 import { action } from '../../services/handlers/text/action.js'
@@ -14,6 +20,7 @@ import { sendTextMessage } from '../../services/extensions/context.js'
 import { regexpReplace } from '../../services/handlers/text/regexp-replace.js'
 import { parseReminderCommand } from '../../services/handlers/text/reminder.js'
 
+// FIXME: Split functions into files
 
 async function extendContext(ctx, next) {
     ctx.text = (text, extra) => sendTextMessage(ctx, text, extra)
@@ -111,7 +118,12 @@ async function reminderCommand(ctx) {
 }
 
 async function anyTextMessage(ctx) {
+    let sent = false
     const isGroup = ctx.from.id !== ctx.chat.id
+
+    sent = isGroup && await processTrigger(ctx.chat.id, ctx.message.text)
+    if (sent) return
+
     if (!isGroup) {
         await ctx.text(texts.errors.unknownCommand)
     }
@@ -131,6 +143,70 @@ async function processTextMessage(ctx, next) {
     await next()
 }
 
+async function addTriggerCommand(ctx) {
+    const originalMessageId = ctx.message.reply_to_message?.message_id
+    if (!originalMessageId) {
+        return await ctx.text(texts.errors.noReply)
+    }
+    const keyword = ctx.rawData
+    const { error, data } = await addTrigger(ctx.chat.id, keyword, originalMessageId)
+    if (error) {
+        switch (data) {
+            default: {
+                return await ctx.text(texts.errors.unknownError)
+            }
+        }
+    } else {
+        await ctx.text(texts.success.triggerAdded(keyword))
+    }
+}
+
+async function removeTriggerCommand(ctx) {
+    const keyword = ctx.rawData
+    const { error, data } = await removeOneTrigger(ctx.chat.id, keyword)
+    if (error) {
+        switch (data) {
+            case errors.bindingNotFound: {
+                return await ctx.text(
+                    texts.errors.bindingNotFound(keyword)
+                )
+            }
+            default: {
+                return await ctx.text(texts.errors.unknownError)
+            }
+        }
+    } else {
+        await ctx.text(texts.success.triggerRemoved(keyword))
+    }
+}
+
+async function getTriggersCommand(ctx) {
+    const { error, data } = await getTriggers(ctx.chat.id)
+    if (error) {
+        switch (data) {
+            default: {
+                return await ctx.text(texts.errors.unknownError)
+            }
+        }
+    } else {
+        if (data.length) {
+            await ctx.text(texts.other.triggerList(
+                data.map(trigger => trigger.keyword)
+            ))
+        } else {
+            await ctx.text(texts.errors.noTriggersFound)
+        }
+    }
+}
+
+async function processTrigger(chatId, text) {
+    const { error, data: trigger } = await triggerResponse(chatId, text)
+    if (!error) {
+        return await trigger.send()
+    }
+    return false
+}
+
 
 export {
     helpCommand,
@@ -139,6 +215,9 @@ export {
     extendContext,
     anyTextMessage,
     reminderCommand,
+    addTriggerCommand,
     processTextMessage,
-    regexReplaceCommand
+    getTriggersCommand,
+    regexReplaceCommand,
+    removeTriggerCommand
 }

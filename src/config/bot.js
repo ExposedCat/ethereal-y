@@ -6,8 +6,11 @@ import {
     actionCommand,
     anyTextMessage,
     reminderCommand,
+    addTriggerCommand,
     processTextMessage,
+    getTriggersCommand,
     regexReplaceCommand,
+    removeTriggerCommand,
     extendContext as extendTextContext
 } from '../controllers/handlers/text.js'
 import {
@@ -19,6 +22,9 @@ import {
 function setupHandlers(bot) {
     bot.use(extendTextContext)
     bot.on('text', processTextMessage)
+    bot.command('/bind', addTriggerCommand)
+    bot.command('/unbind', removeTriggerCommand)
+    bot.command('/bindings', getTriggersCommand)
     bot.command('/do', actionCommand)
     bot.command('/help', helpCommand)
     bot.command('/start', startCommand)
