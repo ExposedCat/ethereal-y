@@ -8,7 +8,8 @@
 [![](https://img.shields.io/badge/Telegram-Developer-informational?style=flat&logo=telegram&logoColor=26A5E4&color=gold)](https://t.me/ExposedCatDev)
 
 ## ⭐️ Features
-Use without square brackets.  
+`[expression]` - Replace with specified expression without square brackets.  
+`{Reply}` - Requires reply message. 
 ### Roleplay
 Sends roleplay message with specified action.  
 ```
@@ -33,6 +34,21 @@ Sends specified note at specified date and time with tagging all subsribers.
 Sends specified note every time by specified [time rule](https://crontab.guru) with tagging all subsribers.
 ```
 /cron 30 */1 * * * Note
+```
+### Triggers
+Sends specified message when specified keyword is sent.
+#### Add
+`{Reply}`
+```
+/bind [keyword]
+```
+#### Remove
+```
+/unbind [keyword]
+```
+#### Show group triggers
+```
+/bindings
 ```
 ## 🏗️ Forking
 ```
