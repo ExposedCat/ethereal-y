@@ -30,6 +30,12 @@ Sends specified note at specified date and time with tagging all subsribers.
 /reminder today 12:34 Note
 /reminder tomorrow 12:34 Note
 ```
+### Broadcast
+`{Reply}` `{Full rights}`  
+Sends specified message to all groups to which this bot was added.
+```
+/broadcast
+```
 ### Recurring reminders
 Sends specified note every time by specified [time rule](https://crontab.guru) with tagging all subsribers.
 ```
@@ -51,6 +57,7 @@ Sends specified message when specified keyword is sent.
 /bindings
 ```
 ### Restrictions
+`{Admin rights}`  
 Restricts specified user.
 #### Read-only mode (mute)
 `{Reply}`

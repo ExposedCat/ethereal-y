@@ -7,6 +7,7 @@ import {
     anyTextMessage,
     restrictCommand,
     reminderCommand,
+    broadcastCommand,
     addTriggerCommand,
     processTextMessage,
     getTriggersCommand,
@@ -32,6 +33,7 @@ function setupHandlers(bot) {
     bot.command('/unmute',
         async ctx => await restrictCommand(ctx, 'removeRestrictions')
     )
+    bot.command('/broadcast', broadcastCommand)
     bot.command('/bind', addTriggerCommand)
     bot.command('/unbind', removeTriggerCommand)
     bot.command('/bindings', getTriggersCommand)

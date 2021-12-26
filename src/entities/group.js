@@ -1,5 +1,6 @@
 import {
     getOneGroup,
+    getAllGroups,
     updateGroupData
 } from '../services/database/group.js'
 import mongoose from 'mongoose'
@@ -20,6 +21,9 @@ const GroupSchema = new Schema({
 class GroupClass {
     static getOne(groupId, title) {
         return getOneGroup(Group, groupId, title)
+    }
+    static getAll() {
+        return getAllGroups(Group)
     }
     updateData(updates) {
         return updateGroupData.bind(this)(Group, updates)

@@ -16,6 +16,10 @@ function getOneGroup(Group, groupId, title) {
     }
 }
 
+function getAllGroups(Group) {
+    return Group.find()
+}
+
 function updateGroupData(Group, updates) {
     return Group.updateOne({
         groupId: this.groupId
@@ -25,5 +29,6 @@ function updateGroupData(Group, updates) {
 
 export {
     getOneGroup,
+    getAllGroups,
     updateGroupData
 }

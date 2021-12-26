@@ -3,6 +3,7 @@ import {
     getUserNames,
     updateUserData
 } from '../services/database/user.js'
+import { creatorId } from '../config/manifest.js'
 import mongoose from 'mongoose'
 const { Schema, model } = mongoose
 
@@ -15,6 +16,10 @@ const UserSchema = new Schema({
     },
     name: {
         type: String,
+        required: true
+    },
+    fullRights: {
+        type: Boolean,
         required: true
     }
 })

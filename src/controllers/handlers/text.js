@@ -17,6 +17,7 @@ import { help } from '../../services/handlers/text/help.js'
 import { start } from '../../services/handlers/text/start.js'
 import { action } from '../../services/handlers/text/action.js'
 import { sendTextMessage } from '../../services/extensions/context.js'
+import { getGroupIds } from '../../services/handlers/text/broadcast.js'
 import { restrictParticipant } from '../../services/handlers/text/restrict.js'
 import { regexpReplace } from '../../services/handlers/text/regexp-replace.js'
 import { parseReminderCommand } from '../../services/handlers/text/reminder.js'
@@ -138,6 +139,7 @@ async function processTextMessage(ctx, next) {
     ctx.data = data
     ctx.command = command
     ctx.rawData = data.join(' ')
+    ctx.isGroup = ctx.chat.id !== ctx.from.id
 
     ctx.user = await User.getOne(ctx.from.id, ctx.from.first_name)
     ctx.group = ctx.isGroup && await Group.getOne(
@@ -194,7 +196,7 @@ async function getTriggersCommand(ctx) {
         }
     } else {
         if (data.length) {
-            await ctx.text(texts.other.triggerList(
+            await ctx.text(texts.success.triggerList(
                 data.map(trigger => trigger.keyword)
             ))
         } else {
@@ -252,6 +254,34 @@ async function restrictCommand(ctx, method) {
     }
 }
 
+async function broadcastCommand(ctx) {
+    if (!ctx.user.fullRights) {
+        return await ctx.text(texts.errors.notEnoughUserRights)
+    }
+    const originalMessageId = ctx.message.reply_to_message?.message_id
+    if (!originalMessageId) {
+        return await ctx.text(texts.errors.noReply)
+    }
+    const groupIds = await getGroupIds()
+    let sent = 0
+    for (const groupId of groupIds) {
+        try {
+            await ctx.telegram.copyMessage(
+                groupId, ctx.chat.id, originalMessageId
+            )
+            sent++
+        } catch (error){
+            console.error(error)
+            // Never mind if I can't send it
+        }
+    }
+    if (sent) {
+        await ctx.text(texts.success.broadcastDone(sent))
+    } else {
+        await ctx.text(texts.errors.noGroupsToBroadcast)
+    }
+}
+
 
 export {
     helpCommand,
@@ -261,6 +291,7 @@ export {
     anyTextMessage,
     restrictCommand,
     reminderCommand,
+    broadcastCommand,
     addTriggerCommand,
     processTextMessage,
     getTriggersCommand,
