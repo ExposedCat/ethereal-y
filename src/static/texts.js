@@ -10,10 +10,11 @@ const texts = {
             reminder: '<code>/reminder 31.01 12:00 Pet a loli</code>\n<code>/reminder yesterday 12:00 Pet a loli</code>'
         },
         notification: text => `🕓 Reminder: «${text}»`,
-        triggerList: triggers => `🔗 Bindings:\n${texts._templates.triggers(triggers)}`,
         help: `👋 Hello!\n👨‍💻 Source code: <a href="https://github.com/ExposedCat/ethereal-y">OPEN</a>\n📖 Reference: <a href="https://github.com/ExposedCat/ethereal-y/blob/main/README.md">OPEN</a>\n\nCreated by @ExposedCatDev`
     },
     success: {
+        broadcastDone: groupsNumber => `📩 Message sent to ${groupsNumber} groups`,
+        triggerList: triggers => `🔗 Bindings:\n${texts._templates.triggers(triggers)}`,
         userMuted: (userName, minutes) => `💢 ${userName} restricted for ${
             minutes ? `${minutes} minute(s)` : 'forever'
         }`,
@@ -25,7 +26,8 @@ const texts = {
         cronSet: (cron, next) => `✍️ You will be notified by time rule: <code>${cron}</code>\nNext notification at: ${next}`
     },
     errors: {
-        cantRestrictUser: `🤨 Can't chnage permissions of this user`,
+        noGroupsToBroadcast: `😶 No groups found or can't send messages to any`,
+        cantRestrictUser: `🤨 Can't change permissions of this user`,
         notEnoughUserRights: `😤 You don't have enough rights`,
         notEnoughBotRights: `🤯 Bot doesn't have enough rights`,
         bindingNotFound: keyword => `🤔 «${keyword}» binding not found`,
@@ -39,7 +41,7 @@ const texts = {
         invalidCron: '🤯 Invalid time rule\nUse crontab.guru to generate valid recurring time rule',
         noReply: '🤔 Reply message is not specified',
         regexpError: error => `🤬 RegExp error: ${error}`,
-        messageTextIsEmpty: `😶 RegExp error: Result message text is empty`,
+        messageTextIsEmpty: `🤯 RegExp error: Result message text is empty`,
         noTriggersFound: `😶 Bindings not found`
     },
     buttons: {
