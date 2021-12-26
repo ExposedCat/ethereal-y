@@ -17,6 +17,7 @@ import { help } from '../../services/handlers/text/help.js'
 import { start } from '../../services/handlers/text/start.js'
 import { action } from '../../services/handlers/text/action.js'
 import { sendTextMessage } from '../../services/extensions/context.js'
+import { restrictParticipant } from '../../services/handlers/text/restrict.js'
 import { regexpReplace } from '../../services/handlers/text/regexp-replace.js'
 import { parseReminderCommand } from '../../services/handlers/text/reminder.js'
 
@@ -210,6 +211,47 @@ async function processTrigger(chatId, text, replyMessageId) {
     return false
 }
 
+async function restrictCommand(ctx, method) {
+    const targetUserId = ctx.message.reply_to_message?.from?.id
+    if (!targetUserId) {
+        return await ctx.text(texts.errors.noReply)
+    }
+    const minutes = Number(ctx.rawData)
+    const { error, data } = await restrictParticipant(method, {
+        minutes,
+        api: ctx.telegram,
+        chatId: ctx.chat.id,
+        userId: targetUserId,
+    })
+    if (error) {
+        switch (data) {
+            case errors.notEnoughBotRights: {
+                return await ctx.text(texts.errors.notEnoughBotRights)
+            }
+            case errors.notEnoughUserRights: {
+                return await ctx.text(texts.errors.notEnoughUserRights)
+            }
+            case errors.cantRestrictUser: {
+                return await ctx.text(texts.errors.cantRestrictUser)
+            }
+            default: {
+                return await ctx.text(texts.errors.unknownError)
+            }
+        }
+    } else {
+        const responses = {
+            mute: 'userMuted',
+            ban: 'userBanned',
+            removeRestrictions: 'userRestrictionsRemoved',
+        }
+        const response = responses[method]
+        const visualMinutes = minutes >= 527040 ? null : minutes
+        await ctx.text(
+            texts.success[response](data, visualMinutes)
+        )
+    }
+}
+
 
 export {
     helpCommand,
@@ -217,6 +259,7 @@ export {
     actionCommand,
     extendContext,
     anyTextMessage,
+    restrictCommand,
     reminderCommand,
     addTriggerCommand,
     processTextMessage,

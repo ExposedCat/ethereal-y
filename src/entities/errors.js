@@ -4,6 +4,9 @@ const errors = {
     invalidDate: Symbol('invalidDate'),
     invalidSyntax: Symbol('invalidSyntax'),
     bindingNotFound: Symbol('bindingNotFound'),
+    cantRestrictUser: Symbol('cantRestrictUser'),
+    notEnoughUserRights: Symbol('notEnoughUserRights'),
+    notEnoughBotRights: Symbol('notEnoughBotRights'),
     nonExistentReminder: Symbol('nonExistentReminder')
 }
 Object.freeze(errors)

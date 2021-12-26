@@ -50,6 +50,24 @@ Sends specified message when specified keyword is sent.
 ```
 /bindings
 ```
+### Restrictions
+Restricts specified user.
+#### Read-only mode (mute)
+`{Reply}`
+```
+/mute
+/mute [time in minutes]
+```
+#### Remove all restrictions
+`{Reply}`
+```
+/unmute
+```
+#### Kick user (ban)
+`{Reply}`
+```
+/ban
+```
 ## 🏗️ Forking
 ```
 git clone https://github.com/ExposedCat/ethereal-y.git

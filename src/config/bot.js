@@ -5,6 +5,7 @@ import {
     startCommand,
     actionCommand,
     anyTextMessage,
+    restrictCommand,
     reminderCommand,
     addTriggerCommand,
     processTextMessage,
@@ -22,6 +23,15 @@ import {
 function setupHandlers(bot) {
     bot.use(extendTextContext)
     bot.on('text', processTextMessage)
+    bot.command('/mute',
+        async ctx => await restrictCommand(ctx, 'mute')
+    )
+    bot.command('/ban',
+        async ctx => await restrictCommand(ctx, 'ban')
+    )
+    bot.command('/unmute',
+        async ctx => await restrictCommand(ctx, 'removeRestrictions')
+    )
     bot.command('/bind', addTriggerCommand)
     bot.command('/unbind', removeTriggerCommand)
     bot.command('/bindings', getTriggersCommand)
