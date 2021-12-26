@@ -14,12 +14,20 @@ const texts = {
         help: `👋 Hello!\n👨‍💻 Source code: <a href="https://github.com/ExposedCat/ethereal-y">OPEN</a>\n📖 Reference: <a href="https://github.com/ExposedCat/ethereal-y/blob/main/README.md">OPEN</a>\n\nCreated by @ExposedCatDev`
     },
     success: {
+        userMuted: (userName, minutes) => `💢 ${userName} restricted for ${
+            minutes ? `${minutes} minute(s)` : 'forever'
+        }`,
+        userBanned: userName => `💢 ${userName} banned`,
+        userRestrictionsRemoved: userName => `😇 All ${userName} restrictions removed`,
         triggerAdded: keyword => `✍️ «${keyword}» binding added`,
         triggerRemoved: keyword => `🗑 «${keyword}» binding removed`,
         reminderSet: (date, time) => `✍️ You will be notified at ${date} ${time}`,
         cronSet: (cron, next) => `✍️ You will be notified by time rule: <code>${cron}</code>\nNext notification at: ${next}`
     },
     errors: {
+        cantRestrictUser: `🤨 Can't chnage permissions of this user`,
+        notEnoughUserRights: `😤 You don't have enough rights`,
+        notEnoughBotRights: `🤯 Bot doesn't have enough rights`,
         bindingNotFound: keyword => `🤔 «${keyword}» binding not found`,
         alreadySubscribed: '🤨 You are already subscribed for or unsubscribed from this reminder',
         unknownCommand: '🤔 Unknown command',
