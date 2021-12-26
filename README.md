@@ -57,21 +57,20 @@ Sends specified message when specified keyword is sent.
 /bindings
 ```
 ### Restrictions
-`{Admin rights}`  
 Restricts specified user.
 #### Read-only mode (mute)
-`{Reply}`
+`{Reply}` `{Admin rights}`  
 ```
 /mute
 /mute [time in minutes]
 ```
 #### Remove all restrictions
-`{Reply}`
+`{Reply}` `{Admin rights}`  
 ```
 /unmute
 ```
 #### Kick user (ban)
-`{Reply}`
+`{Reply}` `{Admin rights}`  
 ```
 /ban
 ```
