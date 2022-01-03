@@ -4,6 +4,7 @@ const texts = {
         triggers: triggers => triggers.map(texts._templates.trigger).join('\n')
     },
     other: {
+        voteBan: (name, ban) => `Vote for ${ban ? 'ban' : 'mute'} ${name}`,
         anonymous: messageText => `Someone: «${messageText}»`,
         greeting: '👋 Hello!',
         hints: {
@@ -47,7 +48,9 @@ const texts = {
     },
     buttons: {
         subscribeReminder: subscribersNumber => `➕ (${subscribersNumber})`,
-        unsubscribeReminder: `➖`
+        unsubscribeReminder: `➖`,
+        pollYes: 'Yes',
+        pollNo: 'No'
     }
 }
 

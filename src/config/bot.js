@@ -1,6 +1,7 @@
 import Bot from 'telegraf'
 
 import {
+    handleVote,
     helpCommand,
     startCommand,
     actionCommand,
@@ -9,6 +10,7 @@ import {
     reminderCommand,
     broadcastCommand,
     addTriggerCommand,
+    voteForBanCommand,
     processTextMessage,
     getTriggersCommand,
     regexReplaceCommand,
@@ -24,6 +26,7 @@ import {
 
 function setupHandlers(bot) {
     bot.use(extendTextContext)
+    bot.on('poll', handleVote)
     bot.on('text', processTextMessage)
     bot.command('/mute',
         async ctx => await restrictCommand(ctx, 'mute')
@@ -44,6 +47,7 @@ function setupHandlers(bot) {
     bot.command('/re', regexReplaceCommand)
     bot.command('/reminder', reminderCommand)
     bot.command('/cron', reminderCommand)
+    bot.command(['/voteban', '/votemute'], voteForBanCommand)
     bot.hears(/\/anon ((?:.|\s)+)/, anonymousMessageCommand)
     bot.on('text', anyTextMessage)
 

@@ -3,6 +3,7 @@ import { connectToDatabase } from './config/database.js'
 
 import { bot } from './services/bot.js'
 
+import { Poll } from './entities/poll.js'
 import { User } from './entities/user.js'
 import { Group } from './entities/group.js'
 import { Trigger } from './entities/trigger.js'
@@ -20,6 +21,7 @@ try {
 console.info('Done')
 
 console.info('Clearing database..')
+await Poll.deleteMany()
 await User.deleteMany()
 await Group.deleteMany()
 await Trigger.deleteMany()
