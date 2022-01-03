@@ -1,5 +1,5 @@
 import { is } from '../../validator.js'
-import { errors } from '../../../entities/errors.js'
+import { Errors } from '../../../entities/errors.js'
 
 
 function formDate(date, time) {
@@ -29,7 +29,7 @@ function formDate(date, time) {
             default: {
                 return {
                     error: true,
-                    data: errors.invalidDate
+                    data: Errors.invalidDate
                 }
             }
         }

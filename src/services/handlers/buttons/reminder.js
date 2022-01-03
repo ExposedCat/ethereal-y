@@ -1,4 +1,4 @@
-import { errors } from '../../../entities/errors.js'
+import { Errors } from '../../../entities/errors.js'
 import { Reminder } from '../../../entities/reminder.js'
 
 
@@ -9,7 +9,7 @@ async function subscribe(userId, reminderId, state) {
     } else {
         return {
             error: true,
-            data: errors.nonExistentReminder
+            data: Errors.nonExistentReminder
         }
     }
 }

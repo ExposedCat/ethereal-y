@@ -1,4 +1,4 @@
-import { errors } from '../../../entities/errors.js'
+import { Errors } from '../../../entities/errors.js'
 import { Trigger } from '../../../entities/trigger.js'
 
 
@@ -22,7 +22,7 @@ async function removeOneTrigger(groupId, keyword) {
     const { deletedCount } = await Trigger.removeOne(groupId, keyword)
     return {
         error: !deletedCount,
-        data: deletedCount ? null : errors.bindingNotFound
+        data: deletedCount ? null : Errors.bindingNotFound
     }
 }
 

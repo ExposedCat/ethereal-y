@@ -1,9 +1,9 @@
-import { texts } from '../../static/texts.js'
-import { buttons } from '../../static/buttons.js'
+import { texts } from '../static/texts.js'
+import { buttons } from '../static/buttons.js'
 
-import { errors } from '../../entities/errors.js'
-import { showPopup } from '../../services/extensions/context.js'
-import { subscribe } from '../../services/handlers/buttons/reminder.js'
+import { Errors } from '../entities/errors.js'
+import { showPopup } from '../services/extensions/context.js'
+import { subscribe } from '../services/handlers/buttons/reminder.js'
 
 async function extendContext(ctx, next) {
     ctx.popup = text => showPopup(ctx, text)
@@ -16,7 +16,7 @@ async function subscribeClick(ctx) {
     const { error, data } = await subscribe(ctx.from.id, reminderId, state)
     if (error) {
         switch (data) {
-            case errors.nonExistentReminder: {
+            case Errors.nonExistentReminder: {
                 await ctx.editMessageReplyMarkup({})
                 return await ctx.popup(texts.errors.nonExistentReminder)
             }
