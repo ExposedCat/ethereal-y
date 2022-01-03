@@ -270,8 +270,8 @@ async function broadcastCommand(ctx) {
                 groupId, ctx.chat.id, originalMessageId
             )
             sent++
-        } catch (error){
-            console.error(error)
+        } catch ({ message }) {
+            console.info(`Can't broadcast message: ${message}`)
             // Never mind if I can't send it
         }
     }
