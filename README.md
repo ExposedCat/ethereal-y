@@ -26,6 +26,7 @@ Sends message with specified replacements.
 ### Reminders
 Sends specified note at specified date and time with tagging all subsribers.
 ```
+/reminder [date] [time] [note]
 /reminder 31.01 12:34 Note
 /reminder today 12:34 Note
 /reminder tomorrow 12:34 Note
@@ -43,9 +44,15 @@ Creates poll to mute (Read-Only mode) or kick chat member. Restriction is applie
 /voteban
 /votemute
 ```
+### Send anonymous message
+Sends given text message and deletes sender.
+```
+/anon [text]
+```
 ### Recurring reminders
 Sends specified note every time by specified [time rule](https://crontab.guru) with tagging all subsribers.
 ```
+/cron [time rule] [note]
 /cron 30 */1 * * * Note
 ```
 ### Triggers
