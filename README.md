@@ -36,6 +36,13 @@ Sends specified message to all groups to which this bot was added.
 ```
 /broadcast
 ```
+### Vote for restriction
+`{Reply}` 
+Creates poll to mute (Read-Only mode) or kick chat member. Restriction is applied after positive votes of 30% of group members.
+```
+/voteban
+/votemute
+```
 ### Recurring reminders
 Sends specified note every time by specified [time rule](https://crontab.guru) with tagging all subsribers.
 ```
