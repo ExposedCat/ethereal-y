@@ -21,6 +21,7 @@ import { getGroupIds } from '../../services/handlers/text/broadcast.js'
 import { restrictParticipant } from '../../services/handlers/text/restrict.js'
 import { regexpReplace } from '../../services/handlers/text/regexp-replace.js'
 import { parseReminderCommand } from '../../services/handlers/text/reminder.js'
+import { anonymousMessage } from '../../services/handlers/text/anonymous-message.js'
 
 // FIXME: Split functions into files
 
@@ -282,6 +283,16 @@ async function broadcastCommand(ctx) {
     }
 }
 
+async function anonymousMessageCommand(ctx) {
+    const messageText = await anonymousMessage(ctx.match[1])
+    try {
+        await ctx.deleteMessage()
+        await ctx.text(messageText)
+    } catch ({ message }) {
+        console.info(`Can't send anonymous message: ${message}`)
+    }
+}
+
 
 export {
     helpCommand,
@@ -296,5 +307,6 @@ export {
     processTextMessage,
     getTriggersCommand,
     regexReplaceCommand,
-    removeTriggerCommand
+    removeTriggerCommand,
+    anonymousMessageCommand
 }

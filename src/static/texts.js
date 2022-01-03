@@ -4,6 +4,7 @@ const texts = {
         triggers: triggers => triggers.map(texts._templates.trigger).join('\n')
     },
     other: {
+        anonymous: messageText => `Someone: «${messageText}»`,
         greeting: '👋 Hello!',
         hints: {
             cron: '<code>/cron * * * * * Pet a loli</code>',

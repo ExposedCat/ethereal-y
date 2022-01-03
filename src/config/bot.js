@@ -13,6 +13,7 @@ import {
     getTriggersCommand,
     regexReplaceCommand,
     removeTriggerCommand,
+    anonymousMessageCommand,
     extendContext as extendTextContext
 } from '../controllers/handlers/text.js'
 import {
@@ -43,6 +44,7 @@ function setupHandlers(bot) {
     bot.command('/re', regexReplaceCommand)
     bot.command('/reminder', reminderCommand)
     bot.command('/cron', reminderCommand)
+    bot.hears(/\/anon ((?:.|\s)+)/, anonymousMessageCommand)
     bot.on('text', anyTextMessage)
 
     bot.use(extendButtonContext)
