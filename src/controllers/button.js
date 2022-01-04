@@ -10,6 +10,23 @@ async function extendContext(ctx, next) {
     await next()
 }
 
+// FIXME: Move logic to service
+async function captchaClick(ctx) {
+    await ctx.answerCbQuery()
+    const userId = ctx.match[1]
+    if (userId == ctx.from.id) {
+        await ctx.telegram.restrictChatMember(ctx.chat.id, ctx.from.id, {
+            can_send_messages: true,
+            can_invite_users: true,
+            can_send_media_messages: true,
+            can_send_polls: true,
+            can_send_other_messages: true,
+            can_add_web_page_previews: true
+        })
+        await ctx.editMessageReplyMarkup()
+    }
+}
+
 async function subscribeClick(ctx) {
     const [_, stringState, reminderId] = ctx.match
     const state = Boolean(Number(stringState))
@@ -38,6 +55,7 @@ async function subscribeClick(ctx) {
 
 
 export {
+    captchaClick,
     extendContext,
     subscribeClick
 }

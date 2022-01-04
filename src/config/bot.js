@@ -2,11 +2,11 @@ import Bot from 'telegraf'
 
 import * as text from '../controllers/text.js'
 import * as button from '../controllers/button.js'
+import { handleNewMembers } from '../controllers/new-members.js'
 
 
 function setupHandlers(bot) {
     bot.use(text.extendContext)
-    bot.on('poll', text.handleVote)
     bot.on('text', text.processTextMessage)
     bot.command('/mute',
         async ctx => await text.restrictCommand(ctx, 'mute')
@@ -32,7 +32,11 @@ function setupHandlers(bot) {
     bot.on('text', text.anyTextMessage)
 
     bot.use(button.extendContext)
+    bot.action(/captcha_(\d+)/, button.captchaClick)
     bot.action(/subscribe_(\d)_(.+)/, button.subscribeClick)
+    
+    bot.on('new_chat_members', handleNewMembers)
+    bot.on('poll', text.handleVote)
 }
 
 function setupBot(token) {

@@ -17,6 +17,9 @@ const buttons = {
         [texts.buttons.subscribeReminder(subscribersNumber), `subscribe_1_${reminderId}`],
         [texts.buttons.unsubscribeReminder, `subscribe_0_${reminderId}`]
     ], 2),
+    captcha: userId => keyboard([
+        [texts.buttons.captcha, `captcha_${userId}`]
+    ]),
     voteBan: [
         texts.buttons.pollYes,
         texts.buttons.pollNo

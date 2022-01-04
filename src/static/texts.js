@@ -6,7 +6,7 @@ const texts = {
     other: {
         voteBan: (name, ban) => `Vote for ${ban ? 'ban' : 'mute'} ${name}`,
         anonymous: messageText => `Someone: «${messageText}»`,
-        greeting: '👋 Hello!',
+        greeting: (userId, userName) => `👋 Hello, <a href="tg://user?id=${userId}">${userName}</a>!`,
         hints: {
             cron: '<code>/cron * * * * * Pet a loli</code>',
             reminder: '<code>/reminder 31.01 12:00 Pet a loli</code>\n<code>/reminder yesterday 12:00 Pet a loli</code>'
@@ -50,7 +50,8 @@ const texts = {
         subscribeReminder: subscribersNumber => `➕ (${subscribersNumber})`,
         unsubscribeReminder: `➖`,
         pollYes: 'Yes',
-        pollNo: 'No'
+        pollNo: 'No',
+        captcha: 'I am not a robot'
     }
 }
 
