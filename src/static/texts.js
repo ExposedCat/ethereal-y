@@ -4,7 +4,9 @@ const texts = {
         triggers: triggers => triggers.map(texts._templates.trigger).join('\n')
     },
     other: {
-        greeting: '👋 Hello!',
+        voteBan: (name, ban) => `Vote for ${ban ? 'ban' : 'mute'} ${name}`,
+        anonymous: messageText => `Someone: «${messageText}»`,
+        greeting: (userId, userName) => `👋 Hello, <a href="tg://user?id=${userId}">${userName}</a>!`,
         hints: {
             cron: '<code>/cron * * * * * Pet a loli</code>',
             reminder: '<code>/reminder 31.01 12:00 Pet a loli</code>\n<code>/reminder yesterday 12:00 Pet a loli</code>'
@@ -46,7 +48,10 @@ const texts = {
     },
     buttons: {
         subscribeReminder: subscribersNumber => `➕ (${subscribersNumber})`,
-        unsubscribeReminder: `➖`
+        unsubscribeReminder: `➖`,
+        pollYes: 'Yes',
+        pollNo: 'No',
+        captcha: 'I am not a robot'
     }
 }
 

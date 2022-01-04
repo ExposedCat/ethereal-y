@@ -1,4 +1,4 @@
-import { errors } from '../../../entities/errors.js'
+import { Errors } from '../../../entities/errors.js'
 
 
 async function mute({ api, chatId, userId, minutes }) {
@@ -43,20 +43,20 @@ async function restrictParticipant(method, parameters) {
                 console.error(error)
                 return {
                     error: true,
-                    data: errors.notEnoughBotRights
+                    data: Errors.notEnoughBotRights
                 }
             }
         } else {
             return {
                 error: true,
-                data: errors.cantRestrictUser
+                data: Errors.cantRestrictUser
             }
         }
     } catch (error) {
         console.error(error)
         return {
             error: true,
-            data: errors.notEnoughBotRights
+            data: Errors.notEnoughBotRights
         }
     }
 }

@@ -4,7 +4,7 @@ import { User } from '../../entities/user.js'
 
 import { bot } from '../bot.js'
 import { texts } from '../../static/texts.js'
-import { errors } from '../../entities/errors.js'
+import { Errors } from '../../entities/errors.js'
 import { formDate } from '../handlers/text/reminder.js'
 
 
@@ -97,7 +97,7 @@ async function createReminder({
         })
         return {
             error: true,
-            data: isDateTime ? errors.invalidDate : errors.invalidCron
+            data: isDateTime ? Errors.invalidDate : Errors.invalidCron
         }
     }
     let reminderData = {

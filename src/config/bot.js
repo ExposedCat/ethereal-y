@@ -1,52 +1,42 @@
 import Bot from 'telegraf'
 
-import {
-    helpCommand,
-    startCommand,
-    actionCommand,
-    anyTextMessage,
-    restrictCommand,
-    reminderCommand,
-    broadcastCommand,
-    addTriggerCommand,
-    processTextMessage,
-    getTriggersCommand,
-    regexReplaceCommand,
-    removeTriggerCommand,
-    extendContext as extendTextContext
-} from '../controllers/handlers/text.js'
-import {
-    subscribeClick,
-    extendContext as extendButtonContext
-} from '../controllers/handlers/button.js'
+import * as text from '../controllers/text.js'
+import * as button from '../controllers/button.js'
+import { handleNewMembers } from '../controllers/new-members.js'
 
 
 function setupHandlers(bot) {
-    bot.use(extendTextContext)
-    bot.on('text', processTextMessage)
+    bot.use(text.extendContext)
+    bot.on('text', text.processTextMessage)
     bot.command('/mute',
-        async ctx => await restrictCommand(ctx, 'mute')
+        async ctx => await text.restrictCommand(ctx, 'mute')
     )
     bot.command('/ban',
-        async ctx => await restrictCommand(ctx, 'ban')
+        async ctx => await text.restrictCommand(ctx, 'ban')
     )
     bot.command('/unmute',
-        async ctx => await restrictCommand(ctx, 'removeRestrictions')
+        async ctx => await text.restrictCommand(ctx, 'removeRestrictions')
     )
-    bot.command('/broadcast', broadcastCommand)
-    bot.command('/bind', addTriggerCommand)
-    bot.command('/unbind', removeTriggerCommand)
-    bot.command('/bindings', getTriggersCommand)
-    bot.command('/do', actionCommand)
-    bot.command('/help', helpCommand)
-    bot.command('/start', startCommand)
-    bot.command('/re', regexReplaceCommand)
-    bot.command('/reminder', reminderCommand)
-    bot.command('/cron', reminderCommand)
-    bot.on('text', anyTextMessage)
+    bot.command('/broadcast', text.broadcastCommand)
+    bot.command('/bind', text.addTriggerCommand)
+    bot.command('/unbind', text.removeTriggerCommand)
+    bot.command('/bindings', text.getTriggersCommand)
+    bot.command('/do', text.actionCommand)
+    bot.command('/help', text.helpCommand)
+    bot.command('/start', text.startCommand)
+    bot.command('/re', text.regexReplaceCommand)
+    bot.command('/reminder', text.reminderCommand)
+    bot.command('/cron', text.reminderCommand)
+    bot.command(['/voteban', '/votemute'], text.voteForBanCommand)
+    bot.hears(/\/anon ((?:.|\s)+)/, text.anonymousMessageCommand)
+    bot.on('text', text.anyTextMessage)
 
-    bot.use(extendButtonContext)
-    bot.action(/subscribe_(\d)_(.+)/, subscribeClick)
+    bot.use(button.extendContext)
+    bot.action(/captcha_(\d+)/, button.captchaClick)
+    bot.action(/subscribe_(\d)_(.+)/, button.subscribeClick)
+    
+    bot.on('new_chat_members', handleNewMembers)
+    bot.on('poll', text.handleVote)
 }
 
 function setupBot(token) {

@@ -1,6 +1,6 @@
 import { texts } from '../../../static/texts.js'
 import { buttons } from '../../../static/buttons.js'
-import { errors } from '../../../entities/errors.js'
+import { Errors } from '../../../entities/errors.js'
 
 
 async function regexpReplace(text, targetText) {
@@ -9,7 +9,7 @@ async function regexpReplace(text, targetText) {
     if (!replacementGroups) {
         return {
             error: true,
-            data: errors.invalidSyntax
+            data: Errors.invalidSyntax
         }
     }
     let replaced = targetText

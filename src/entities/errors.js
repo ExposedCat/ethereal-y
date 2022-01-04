@@ -1,4 +1,4 @@
-const errors = {
+const Errors = {
     noReply: Symbol('noReply'),
     invalidCron: Symbol('invalidCron'),
     invalidDate: Symbol('invalidDate'),
@@ -9,7 +9,7 @@ const errors = {
     notEnoughBotRights: Symbol('notEnoughBotRights'),
     nonExistentReminder: Symbol('nonExistentReminder')
 }
-Object.freeze(errors)
+Object.freeze(Errors)
 
 
-export { errors }
+export { Errors }

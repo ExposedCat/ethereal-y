@@ -1,13 +1,30 @@
-import { texts } from '../../static/texts.js'
-import { buttons } from '../../static/buttons.js'
+import { texts } from '../static/texts.js'
+import { buttons } from '../static/buttons.js'
 
-import { errors } from '../../entities/errors.js'
-import { showPopup } from '../../services/extensions/context.js'
-import { subscribe } from '../../services/handlers/buttons/reminder.js'
+import { Errors } from '../entities/errors.js'
+import { showPopup } from '../services/extensions/context.js'
+import { subscribe } from '../services/handlers/buttons/reminder.js'
 
 async function extendContext(ctx, next) {
     ctx.popup = text => showPopup(ctx, text)
     await next()
+}
+
+// FIXME: Move logic to service
+async function captchaClick(ctx) {
+    await ctx.answerCbQuery()
+    const userId = ctx.match[1]
+    if (userId == ctx.from.id) {
+        await ctx.telegram.restrictChatMember(ctx.chat.id, ctx.from.id, {
+            can_send_messages: true,
+            can_invite_users: true,
+            can_send_media_messages: true,
+            can_send_polls: true,
+            can_send_other_messages: true,
+            can_add_web_page_previews: true
+        })
+        await ctx.editMessageReplyMarkup()
+    }
 }
 
 async function subscribeClick(ctx) {
@@ -16,7 +33,7 @@ async function subscribeClick(ctx) {
     const { error, data } = await subscribe(ctx.from.id, reminderId, state)
     if (error) {
         switch (data) {
-            case errors.nonExistentReminder: {
+            case Errors.nonExistentReminder: {
                 await ctx.editMessageReplyMarkup({})
                 return await ctx.popup(texts.errors.nonExistentReminder)
             }
@@ -38,6 +55,7 @@ async function subscribeClick(ctx) {
 
 
 export {
+    captchaClick,
     extendContext,
     subscribeClick
 }
