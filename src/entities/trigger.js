@@ -15,12 +15,16 @@ const TriggerSchema = new Schema({
         required: true
     },
     originalMessageId: {
-        type: Number,
-        required: true
+        type: Number
     },
     keyword: {
         type: String,
         required: true
+    },
+    deleteTrigger: {
+        type: Boolean,
+        required: true,
+        default: false
     }
 })
 

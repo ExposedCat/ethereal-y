@@ -6,7 +6,8 @@ function createNew(Trigger, groupId, keyword, originalMessageId) {
         groupId,
         keyword
     }, {
-        originalMessageId
+        originalMessageId,
+        deleteTrigger: originalMessageId === null
     }, {
         upsert: true,
         new: true,
