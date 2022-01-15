@@ -108,6 +108,7 @@ export {
 export {
     removeOneTrigger,
     addTriggerCommand,
+    addDeleteTriggerCommand,
     getTriggersCommand,
     removeTriggerCommand
 } from './text/triggers.js'

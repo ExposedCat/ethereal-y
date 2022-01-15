@@ -56,11 +56,16 @@ Sends specified note every time by specified [time rule](https://crontab.guru) w
 /cron 30 */1 * * * Note
 ```
 ### Triggers
-Sends specified message when specified keyword is sent.
+Sends specified message when specified keyword is sent (or deletes trigger).
 #### Add
 `{Reply}`
 ```
 /bind [keyword]
+```
+#### Add trigger to delete
+`{Reply}`
+```
+/bind_delete [keyword]
 ```
 #### Remove
 ```

@@ -4,7 +4,8 @@ import { processTrigger } from './triggers.js'
 function doProcessTrigger(ctx, isGroup) {
     return isGroup && processTrigger(
         ctx.chat.id, ctx.message.text,
-        ctx.message.message_id
+        ctx.message.message_id,
+        ctx.telegram
     )
 }
 

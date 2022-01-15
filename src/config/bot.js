@@ -19,6 +19,7 @@ function setupHandlers(bot) {
     )
     bot.command('/broadcast', text.broadcastCommand)
     bot.command('/bind', text.addTriggerCommand)
+    bot.command('/bind_delete', text.addDeleteTriggerCommand)
     bot.command('/unbind', text.removeTriggerCommand)
     bot.command('/bindings', text.getTriggersCommand)
     bot.command('/do', text.actionCommand)

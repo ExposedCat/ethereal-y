@@ -22,7 +22,7 @@ const texts = {
         }`,
         userBanned: userName => `💢 ${userName} banned`,
         userRestrictionsRemoved: userName => `😇 All ${userName} restrictions removed`,
-        triggerAdded: keyword => `✍️ «${keyword}» binding added`,
+        triggerAdded: (keyword, deleteTrigger = false) => `✍️ «${keyword}» binding added ${deleteTrigger ? '(🗑)' : ''}`,
         triggerRemoved: keyword => `🗑 «${keyword}» binding removed`,
         reminderSet: (date, time) => `✍️ You will be notified at ${date} ${time}`,
         cronSet: (cron, next) => `✍️ You will be notified by time rule: <code>${cron}</code>\nNext notification at: ${next}`
