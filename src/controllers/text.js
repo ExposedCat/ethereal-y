@@ -94,6 +94,7 @@ async function anonymousMessageCommand(ctx) {
     }
 }
 
+
 export {
     handleVote,
     restrictCommand,

@@ -60,4 +60,5 @@ class ReminderClass {
 ReminderSchema.loadClass(ReminderClass)
 const Reminder = model('Reminder', ReminderSchema)
 
+
 export { Reminder }

@@ -5,6 +5,7 @@ import { Errors } from '../entities/errors.js'
 import { showPopup } from '../services/extensions/context.js'
 import { subscribe } from '../services/handlers/buttons/reminder.js'
 
+
 async function extendContext(ctx, next) {
     ctx.popup = text => showPopup(ctx, text)
     await next()

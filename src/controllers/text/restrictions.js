@@ -84,6 +84,7 @@ async function restrictCommand(ctx, method) {
     }
 }
 
+
 export {
     handleVote,
     restrictCommand,
