@@ -14,6 +14,7 @@ async function voteForBanCommand(ctx) {
     const target = ctx.message.reply_to_message.from
     try {
         const text = texts.other.voteBan(target.first_name, ban)
+        // FIXME: Move logic to service
         const { poll, message_id } = await ctx.telegram.sendPoll(
             ctx.chat.id, text, buttons.voteBan,
             { is_anonymous: false }
@@ -26,10 +27,12 @@ async function voteForBanCommand(ctx) {
             messageId: message_id
         })
     } catch ({ message }) {
+        // FIXME: Move error message to some storage
         console.info(`Can't vote for user ban: ${message}`)
     }
 }
 
+// FIXME: Move logic to service
 async function handleVote(ctx) {
     const pollData = ctx.poll
     const poll = await Poll.getOne(pollData.id)

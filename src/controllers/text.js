@@ -21,6 +21,8 @@ async function helpCommand(ctx) {
 }
 
 async function actionCommand(ctx) {
+    // FIXME: Move logic to service
+    // Service should return final string
     const actionMessage = await action(ctx.rawData)
     const name = ctx.from.first_name
     const message = `${name}: *${actionMessage}*`
@@ -73,6 +75,7 @@ async function broadcastCommand(ctx) {
             )
             sent++
         } catch ({ message }) {
+            // FIXME: Move error message to some storage
             console.info(`Can't broadcast message: ${message}`)
             // Never mind if I can't send it
         }
@@ -90,6 +93,7 @@ async function anonymousMessageCommand(ctx) {
         await ctx.deleteMessage()
         await ctx.text(messageText)
     } catch ({ message }) {
+        // FIXME: Move error message to some storage
         console.info(`Can't send anonymous message: ${message}`)
     }
 }

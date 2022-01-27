@@ -1,5 +1,4 @@
 import { texts } from '../../../static/texts.js'
-import { buttons } from '../../../static/buttons.js'
 
 
 async function start(user) {

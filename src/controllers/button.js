@@ -11,11 +11,11 @@ async function extendContext(ctx, next) {
     await next()
 }
 
-// FIXME: Move logic to service
 async function captchaClick(ctx) {
     await ctx.answerCbQuery()
     const userId = ctx.match[1]
     if (userId == ctx.from.id) {
+        // FIXME: Move logic to service
         await ctx.telegram.restrictChatMember(ctx.chat.id, ctx.from.id, {
             can_send_messages: true,
             can_invite_users: true,
@@ -44,11 +44,8 @@ async function subscribeClick(ctx) {
         }
     }
     try {
-        await ctx.editMessageReplyMarkup(
-            buttons
-                .reminderSubscription(reminderId, data)
-                .reply_markup
-        )
+        const { reply_markup } = buttons.reminderSubscription(reminderId, data)
+        await ctx.editMessageReplyMarkup(reply_markup)
     } catch {
         await ctx.popup(texts.errors.alreadySubscribed)
     }

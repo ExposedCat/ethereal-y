@@ -1,5 +1,3 @@
-import { texts } from '../../../static/texts.js'
-import { buttons } from '../../../static/buttons.js'
 import { Errors } from '../../../entities/errors.js'
 
 

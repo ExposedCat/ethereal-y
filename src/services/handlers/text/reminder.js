@@ -49,7 +49,10 @@ function parseReminderCommand(command, rawData) {
         parser = /^(.+?) (?:.+? )?(\d{1,2}:\d\d) (.+)$/
     }
     const commandData = rawData.match(parser)
-    return { commandData, isDateTime }
+    return {
+        isDateTime,
+        commandData
+    }
 }
 
 

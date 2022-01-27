@@ -7,7 +7,6 @@ async function getOneUser(User, userId, name) {
             userId
         }, {
             name,
-            // FIXME: Remove after creator stored in db
             fullRights: userId === creatorId
         }, {
             new: true,

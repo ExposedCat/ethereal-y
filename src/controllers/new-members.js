@@ -2,6 +2,7 @@ import { texts } from '../static/texts.js'
 import { buttons } from '../static/buttons.js'
 
 
+// FIXME: Move logic to service
 async function handleNewMembers(ctx) {
     const newMembers = ctx.message.new_chat_members
     const isInvited = newMembers[0].id !== ctx.from.id
