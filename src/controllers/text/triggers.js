@@ -7,6 +7,9 @@ import {
 import { texts } from '../../static/texts.js'
 import { Errors } from '../../entities/errors.js'
 
+// TODO: Add ability to restrict triggers to be managed only
+// by group admins and make it configurable via group settings
+// TODO: Allow to use regex instead of plain text
 
 async function addDeleteTriggerCommand(ctx) {
     const keyword = ctx.rawData

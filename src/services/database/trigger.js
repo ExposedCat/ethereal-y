@@ -30,6 +30,7 @@ async function triggerResponse(Trigger, groupId, text) {
     const lowerText = text.toLowerCase()
     const triggers = await Trigger.find({ groupId })
     for (const trigger of triggers) {
+        // TODO: Allow to set triggers' case sensitivity
         if (lowerText.includes(trigger.keyword)) {
             return {
                 error: false,

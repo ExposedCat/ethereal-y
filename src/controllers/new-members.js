@@ -6,10 +6,15 @@ import { buttons } from '../static/buttons.js'
 import { restrictParticipant } from '../services/handlers/restrict.js'
 
 
-// FIXME: Move logic to service
 async function handleNewMembers(ctx) {
     const newMembers = ctx.message.new_chat_members
     const isInvited = newMembers[0].id !== ctx.from.id
+    // FIXME: Send greeting if user was invited too
+    // TODO: Make captcha validation optional with group settings
+    // TODO: Move captcha texts to group settings
+    // TODO: Add group setting to mute user-bots instead of ban 
+    // TODO: Make greeting optional with group settings
+    // TODO: Move greeting content to group settings
     if (isInvited) {
         return
     }
