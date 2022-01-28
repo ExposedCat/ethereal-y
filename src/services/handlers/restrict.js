@@ -1,4 +1,4 @@
-import { Errors } from '../../../entities/errors.js'
+import { Errors } from '../../entities/errors.js'
 
 
 async function mute({ api, chatId, userId, minutes }) {

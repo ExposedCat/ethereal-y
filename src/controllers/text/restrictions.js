@@ -2,7 +2,7 @@ import { Poll } from '../../entities/poll.js'
 import { texts } from '../../static/texts.js'
 import { Errors } from '../../entities/errors.js'
 import { buttons } from '../../static/buttons.js'
-import { restrictParticipant } from '../../services/handlers/text/restrict.js'
+import { restrictParticipant } from '../../services/handlers/restrict.js'
 
 
 async function voteForBanCommand(ctx) {
