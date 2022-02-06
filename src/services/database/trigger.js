@@ -54,7 +54,6 @@ async function sendTriggerMessage(replyMessageId) {
             }
         )
     } catch (error) {
-        // FIXME: Move error message to some storage
         console.error(`Can't send binded message: `)
         console.trace(error)
     }

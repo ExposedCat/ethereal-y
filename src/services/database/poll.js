@@ -15,7 +15,6 @@ async function applyPollAction(Poll, ctx) {
         })
         return true
     } catch ({ message }) {
-        // FIXME: Move error message to some storage
         console.info(`Can't apply poll action: ${message}`)
         // Never mind if can't apply action
         return false
