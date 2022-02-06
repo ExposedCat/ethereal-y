@@ -4,6 +4,10 @@ import * as text from '../controllers/text.js'
 import * as button from '../controllers/button.js'
 import { handleNewMembers } from '../controllers/new-members.js'
 
+async function extendContextWithSelf(bot) {
+    const self = await bot.telegram.getMe()
+    bot.context.self = self
+}
 
 function setupHandlers(bot) {
     bot.use(text.extendContext)
@@ -52,4 +56,7 @@ function setupBot(token) {
 }
 
 
-export { setupBot }
+export {
+    setupBot,
+    extendContextWithSelf
+}
