@@ -63,5 +63,6 @@ async function restrictParticipant(method, parameters) {
 
 
 export {
-    restrictParticipant
+    restrictParticipant,
+    removeRestrictions
 }
