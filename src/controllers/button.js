@@ -4,6 +4,9 @@ import { buttons } from '../static/buttons.js'
 import { Errors } from '../entities/errors.js'
 import { showPopup } from '../services/extensions/context.js'
 import { subscribe } from '../services/handlers/buttons/reminder.js'
+import { removeRestrictions } from '../services/handlers/restrict.js'
+
+import { Group } from '../entities/group.js'
 
 
 async function extendContext(ctx, next) {
@@ -15,15 +18,21 @@ async function captchaClick(ctx) {
     await ctx.answerCbQuery()
     const userId = ctx.match[1]
     if (userId == ctx.from.id) {
-        // FIXME: Move logic to service
-        await ctx.telegram.restrictChatMember(ctx.chat.id, ctx.from.id, {
-            can_send_messages: true,
-            can_invite_users: true,
-            can_send_media_messages: true,
-            can_send_polls: true,
-            can_send_other_messages: true,
-            can_add_web_page_previews: true
-        })
+        try {
+            await removeRestrictions({
+                api: ctx.telegram,
+                chatId: ctx.chat.id,
+                userId: ctx.from.id
+            })
+            await Group.findOneAndUpdate({
+                groupId: ctx.chat.id,
+                $addToSet: {
+                    users: userId
+                }
+            })
+        } catch {
+            // Unrestrict unrestricted (owner, unrestricted by admins)
+        }
         await ctx.editMessageReplyMarkup()
     }
 }
