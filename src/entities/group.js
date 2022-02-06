@@ -15,6 +15,10 @@ const GroupSchema = new Schema({
     title: {
         type: String,
         required: true
+    },
+    users: {
+        type: [Number],
+        required: true
     }
 })
 
