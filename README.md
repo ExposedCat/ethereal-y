@@ -58,14 +58,18 @@ Sends specified note every time by specified [time rule](https://crontab.guru) w
 ### Triggers
 Sends specified message when specified keyword is sent (or deletes trigger).
 #### Add
-`{Reply}`
+`{Reply}`  
+`-s` makes trigger case-sensitive
 ```
 /bind [keyword]
+/bind -s [keyword]
 ```
 #### Add trigger to delete
 `{Reply}`
+`-s` makes trigger case-sensitive
 ```
 /bind_delete [keyword]
+/bind_delete -s [keyword]
 ```
 #### Remove
 ```

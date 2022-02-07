@@ -1,13 +1,14 @@
 import { bot } from '../bot.js'
 
 
-function createNew(Trigger, groupId, keyword, originalMessageId) {
+function createNew(Trigger, groupId, keyword, originalMessageId, caseSensitive) {
     return Trigger.findOneAndUpdate({
         groupId,
         keyword
     }, {
         originalMessageId,
-        deleteTrigger: originalMessageId === null
+        deleteTrigger: originalMessageId === null,
+        caseSensitive
     }, {
         upsert: true,
         new: true,
@@ -27,11 +28,15 @@ function getForGroup(Trigger, groupId) {
 }
 
 async function triggerResponse(Trigger, groupId, text) {
-    const lowerText = text.toLowerCase()
     const triggers = await Trigger.find({ groupId })
     for (const trigger of triggers) {
-        // TODO: Allow to set triggers' case sensitivity
-        if (lowerText.includes(trigger.keyword)) {
+        let finalText = text
+        let finalKeyword = trigger.keyword
+        if (!trigger.caseSensitive) {
+            finalText = finalText.toLowerCase()
+            finalKeyword = finalKeyword.toLowerCase()
+        }
+        if (finalText.includes(finalKeyword)) {
             return {
                 error: false,
                 data: trigger
