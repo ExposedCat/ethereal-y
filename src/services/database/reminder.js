@@ -27,6 +27,7 @@ async function sendReminder(Reminder) {
         })
         return true
     }
+    let success = true
     try {
         await bot.telegram.sendMessage(
             this.chatId,
@@ -47,13 +48,18 @@ async function sendReminder(Reminder) {
                 { parse_mode: 'HTML' }
             )
         }
-        return true
     } catch {
+        success = false
+    }
+
+    if (!success || Number(this.date)) {
         await Reminder.deleteOne({
             reminderId: this.reminderId
         })
-        return false
+        console.log(`Delete: ${!success} || ${Number(this.date)}`)
     }
+
+    return success
 }
 
 async function scheduleReminder(Reminder, isDateTime) {

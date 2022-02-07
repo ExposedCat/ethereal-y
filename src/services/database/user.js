@@ -1,12 +1,12 @@
 import { creatorId } from '../../config/manifest.js'
 
+
 async function getOneUser(User, userId, name) {
     try {
         return await User.findOneAndUpdate({
             userId
         }, {
             name,
-            // FIXME: Remove after creator stored in db
             fullRights: userId === creatorId
         }, {
             new: true,

@@ -6,11 +6,21 @@ import {
 } from '../../services/handlers/text/trigger.js'
 import { texts } from '../../static/texts.js'
 import { Errors } from '../../entities/errors.js'
+import { getRights } from '../../services/rules.js'
 
+// TODO: Add ability to restrict triggers to be managed only
+// by group admins and make it configurable via group settings
+// TODO: Allow to use regex instead of plain text
 
 async function addDeleteTriggerCommand(ctx) {
-    const keyword = ctx.rawData
-    const { error, data } = await addTrigger(ctx.chat.id, keyword, null)
+    const { isAdmin } = await getRights(ctx.telegram, ctx.chat.id, ctx.from.id)
+    if (!isAdmin) {
+        await ctx.text(texts.errors.notEnoughUserRights)
+        return
+    }
+    const caseSensitive = ctx.match[1] === '-s '
+    const keyword = ctx.match[2]
+    const { error, data } = await addTrigger(ctx.chat.id, keyword, null, caseSensitive)
     if (error) {
         switch (data) {
             default: {
@@ -23,12 +33,21 @@ async function addDeleteTriggerCommand(ctx) {
 }
 
 async function addTriggerCommand(ctx) {
+    const { isAdmin } = await getRights(ctx.telegram, ctx.chat.id, ctx.from.id)
+    if (!isAdmin) {
+        await ctx.text(texts.errors.notEnoughUserRights)
+        return
+    }
     const originalMessageId = ctx.message.reply_to_message?.message_id
     if (!originalMessageId) {
         return await ctx.text(texts.errors.noReply)
     }
-    const keyword = ctx.rawData
-    const { error, data } = await addTrigger(ctx.chat.id, keyword, originalMessageId)
+    const caseSensitive = ctx.match[1] === '-s '
+    const keyword = ctx.match[2]
+    const { error, data } = await addTrigger(
+        ctx.chat.id,
+        keyword, originalMessageId, caseSensitive
+    )
     if (error) {
         switch (data) {
             default: {
@@ -41,6 +60,11 @@ async function addTriggerCommand(ctx) {
 }
 
 async function removeTriggerCommand(ctx) {
+    const { isAdmin } = await getRights(ctx.telegram, ctx.chat.id, ctx.from.id)
+    if (!isAdmin) {
+        await ctx.text(texts.errors.notEnoughUserRights)
+        return
+    }
     const keyword = ctx.rawData
     const { error, data } = await removeOneTrigger(ctx.chat.id, keyword)
     if (error) {
@@ -69,9 +93,8 @@ async function getTriggersCommand(ctx) {
         }
     } else {
         if (data.length) {
-            await ctx.text(texts.success.triggerList(
-                data.map(trigger => trigger.keyword)
-            ))
+            console.log(data)
+            await ctx.text(texts.success.triggerList(data))
         } else {
             await ctx.text(texts.errors.noTriggersFound)
         }

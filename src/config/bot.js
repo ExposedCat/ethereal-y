@@ -4,6 +4,10 @@ import * as text from '../controllers/text.js'
 import * as button from '../controllers/button.js'
 import { handleNewMembers } from '../controllers/new-members.js'
 
+async function extendContextWithSelf(bot) {
+    const self = await bot.telegram.getMe()
+    bot.context.self = self
+}
 
 function setupHandlers(bot) {
     bot.use(text.extendContext)
@@ -18,8 +22,8 @@ function setupHandlers(bot) {
         async ctx => await text.restrictCommand(ctx, 'removeRestrictions')
     )
     bot.command('/broadcast', text.broadcastCommand)
-    bot.command('/bind', text.addTriggerCommand)
-    bot.command('/bind_delete', text.addDeleteTriggerCommand)
+    bot.hears(/\/bind (-s )?((?:.|\s)+)/, text.addTriggerCommand)
+    bot.hears(/\/bind_delete (-s )?((?:.|\s)+)/, text.addDeleteTriggerCommand)
     bot.command('/unbind', text.removeTriggerCommand)
     bot.command('/bindings', text.getTriggersCommand)
     bot.command('/do', text.actionCommand)
@@ -52,4 +56,7 @@ function setupBot(token) {
 }
 
 
-export { setupBot }
+export {
+    setupBot,
+    extendContextWithSelf
+}

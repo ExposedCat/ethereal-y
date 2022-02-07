@@ -1,3 +1,4 @@
+import { Group } from '../../entities/group.js'
 import { processTrigger } from './triggers.js'
 
 
@@ -15,6 +16,14 @@ const functions = [
 
 async function anyTextMessage(ctx) {
     const isGroup = ctx.from.id !== ctx.chat.id
+    if (isGroup) {
+        const group = await Group.getOne(ctx.chat.id, ctx.chat.title)
+        await group.updateData({
+            $addToSet: {
+                users: ctx.from.id
+            }
+        })
+    }
     for (const func of functions) {
         const responseSent = await func(ctx, isGroup)
         if (responseSent) {

@@ -1,4 +1,4 @@
-import { Errors } from '../../../entities/errors.js'
+import { Errors } from '../entities/errors.js'
 
 
 async function mute({ api, chatId, userId, minutes }) {
@@ -63,5 +63,6 @@ async function restrictParticipant(method, parameters) {
 
 
 export {
-    restrictParticipant
+    restrictParticipant,
+    removeRestrictions
 }

@@ -1,16 +1,6 @@
-import { texts } from '../../../static/texts.js'
-import { buttons } from '../../../static/buttons.js'
+import { replacements } from '../../../static/replacements.js'
 
-
-const replacements = [
-    ['йти', 'шел(-ла)'],
-    ['реть', 'р(-ла)'],
-    ['ться', 'лся(-ась)'],
-    ['хнуть', 'х(-ла)'],
-    ['ть', 'л(-а)'],
-]
-
-async function action(text) {
+async function action(text, name) {
     let result = text
     const ending = `(?=[^А-ЯЁа-яё*]|$)`
     for (const [from, to] of replacements) {
@@ -18,7 +8,7 @@ async function action(text) {
         result = result.replace(regexp, to)
     }
     result = result.replace(/(?<=[А-ЯЁа-яё])\*(?=\s|\n|$)/g, '')
-    return result
+    return `${name}: *${result}*`
 }
 
 

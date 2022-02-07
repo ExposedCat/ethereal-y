@@ -21,10 +21,8 @@ async function helpCommand(ctx) {
 }
 
 async function actionCommand(ctx) {
-    const actionMessage = await action(ctx.rawData)
-    const name = ctx.from.first_name
-    const message = `${name}: *${actionMessage}*`
-    await ctx.text(message)
+    const actionMessage = await action(ctx.rawData, ctx.from.first_name)
+    await ctx.text(actionMessage)
     try {
         await ctx.deleteMessage()
     } catch {
@@ -93,6 +91,7 @@ async function anonymousMessageCommand(ctx) {
         console.info(`Can't send anonymous message: ${message}`)
     }
 }
+
 
 export {
     handleVote,

@@ -2,7 +2,8 @@ import { Poll } from '../../entities/poll.js'
 import { texts } from '../../static/texts.js'
 import { Errors } from '../../entities/errors.js'
 import { buttons } from '../../static/buttons.js'
-import { restrictParticipant } from '../../services/handlers/text/restrict.js'
+import { restrictParticipant } from '../../services/restrict.js'
+import { processPollVote } from '../../services/handlers/polls/process-vote.js'
 
 
 async function voteForBanCommand(ctx) {
@@ -32,14 +33,11 @@ async function voteForBanCommand(ctx) {
 
 async function handleVote(ctx) {
     const pollData = ctx.poll
-    const poll = await Poll.getOne(pollData.id)
-    if (poll) {
-        const yesVotes = pollData.options[0].voter_count
-        const membersNumber = await ctx.telegram.getChatMembersCount(poll.chatId)
-        const votesToApply = membersNumber * 0.3 | 0 || 1
-        if (yesVotes >= votesToApply) {
-            await poll.apply(ctx)
-        }
+    const { id } = pollData
+    const yesVotes = pollData.options[0].voter_count
+    const { shouldApply, poll } = await processPollVote(ctx.telegram, id, yesVotes)
+    if (shouldApply) {
+        await poll.apply(ctx)
     }
 }
 
@@ -83,6 +81,7 @@ async function restrictCommand(ctx, method) {
         )
     }
 }
+
 
 export {
     handleVote,

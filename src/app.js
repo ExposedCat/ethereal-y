@@ -1,4 +1,5 @@
 import { databaseName } from './config/manifest.js'
+import { extendContextWithSelf } from './config/bot.js'
 import { connectToDatabase } from './config/database.js'
 
 import { bot } from './services/bot.js'
@@ -30,6 +31,7 @@ console.info('Done')
 
 console.info('Starting bot..')
 bot.launch()
+await extendContextWithSelf(bot)
 console.info('Done')
 console.info('-----------')
 console.info('App started')

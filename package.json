@@ -1,6 +1,6 @@
 {
     "name": "telegram-bot",
-    "version": "1.9.1",
+    "version": "1.10-beta",
     "description": "Telegram bot",
     "main": "src/app.js",
     "scripts": {
