@@ -2,7 +2,7 @@ import { Errors } from '../../../entities/errors.js'
 
 
 async function regexpReplace(text, targetText) {
-    const parser = /(?:([gim]{0,3}))?\/(.+?)\/((?:.|)+?)\/$/gm
+    const parser = /(?:([gim]{0,3}))?\/(.+)\/((?:.|)+?)\/$/gm
     const replacementGroups = text.matchAll(parser)
     if (!replacementGroups) {
         return {
