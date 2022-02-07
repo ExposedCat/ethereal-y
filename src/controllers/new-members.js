@@ -4,7 +4,7 @@ import {
 import { texts } from '../static/texts.js'
 import { Group } from '../entities/group.js'
 import { buttons } from '../static/buttons.js'
-import { restrictParticipant } from '../services/handlers/restrict.js'
+import { restrictParticipant } from '../services/restrict.js'
 
 
 async function handleNewMembers(ctx) {

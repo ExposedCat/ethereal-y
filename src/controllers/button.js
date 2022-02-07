@@ -4,7 +4,7 @@ import { buttons } from '../static/buttons.js'
 import { Errors } from '../entities/errors.js'
 import { showPopup } from '../services/extensions/context.js'
 import { subscribe } from '../services/handlers/buttons/reminder.js'
-import { removeRestrictions } from '../services/handlers/restrict.js'
+import { removeRestrictions } from '../services/restrict.js'
 
 import { Group } from '../entities/group.js'
 
