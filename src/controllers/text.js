@@ -47,7 +47,9 @@ async function regexReplaceCommand(ctx) {
         }
     } else {
         if (data) {
-            await ctx.text(data)
+            await ctx.text(data, {
+                reply_to_message_id: reply.message_id
+            })
         } else {
             await ctx.text(texts.errors.messageTextIsEmpty)
         }
