@@ -42,11 +42,20 @@ async function addTriggerCommand(ctx) {
     if (!originalMessageId) {
         return await ctx.text(texts.errors.noReply)
     }
-    const caseSensitive = ctx.match[1] === '-s '
+    const flag = icon => ctx.match[1].includes(`-${icon} `)
+    const regexTrigger = flag('r')
+    if (regexTrigger) {
+        try {
+            new RegExp(regexTrigger)
+        } catch (error) {
+            return await ctx.text(texts.errors.regexpError(error))
+        }
+    }
+    const caseSensitive = flag('s')
     const keyword = ctx.match[2]
     const { error, data } = await addTrigger(
         ctx.chat.id,
-        keyword, originalMessageId, caseSensitive
+        keyword, originalMessageId, caseSensitive, regexTrigger
     )
     if (error) {
         switch (data) {
@@ -93,7 +102,6 @@ async function getTriggersCommand(ctx) {
         }
     } else {
         if (data.length) {
-            console.log(data)
             await ctx.text(texts.success.triggerList(data))
         } else {
             await ctx.text(texts.errors.noTriggersFound)

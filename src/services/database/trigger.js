@@ -1,14 +1,14 @@
 import { bot } from '../bot.js'
 
 
-function createNew(Trigger, groupId, keyword, originalMessageId, caseSensitive) {
+function createNew(Trigger, groupId, keyword, originalMessageId, caseSensitive, regexTrigger) {
     return Trigger.findOneAndUpdate({
         groupId,
         keyword
     }, {
         originalMessageId,
         deleteTrigger: originalMessageId === null,
-        caseSensitive
+        caseSensitive, regexTrigger
     }, {
         upsert: true,
         new: true,
@@ -30,13 +30,21 @@ function getForGroup(Trigger, groupId) {
 async function triggerResponse(Trigger, groupId, text) {
     const triggers = await Trigger.find({ groupId })
     for (const trigger of triggers) {
-        let finalText = text
-        let finalKeyword = trigger.keyword
-        if (!trigger.caseSensitive) {
-            finalText = finalText.toLowerCase()
-            finalKeyword = finalKeyword.toLowerCase()
+        let triggered = false
+        if (!trigger.regexTrigger) {
+            let finalText = text
+            let finalKeyword = trigger.keyword
+            if (!trigger.caseSensitive) {
+                finalText = finalText.toLowerCase()
+                finalKeyword = finalKeyword.toLowerCase()
+            }
+            triggered = finalText.includes(finalKeyword)
+        } else {
+            const flags = trigger.caseSensitive ? 'i' : ''
+            const regex = new RegExp(trigger.keyword, flags)
+            triggered = regex.test(text)
         }
-        if (finalText.includes(finalKeyword)) {
+        if (triggered) {
             return {
                 error: false,
                 data: trigger
