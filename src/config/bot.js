@@ -22,7 +22,7 @@ function setupHandlers(bot) {
         async ctx => await text.restrictCommand(ctx, 'removeRestrictions')
     )
     bot.command('/broadcast', text.broadcastCommand)
-    bot.hears(/\/bind (-s )?((?:.|\s)+)/, text.addTriggerCommand)
+    bot.hears(/\/bind ((?:-. )*)((?:.|\s)+)/, text.addTriggerCommand)
     bot.hears(/\/bind_delete (-s )?((?:.|\s)+)/, text.addDeleteTriggerCommand)
     bot.command('/unbind', text.removeTriggerCommand)
     bot.command('/bindings', text.getTriggersCommand)

@@ -1,6 +1,6 @@
 const texts = {
     _templates: {
-        trigger: trigger => `· <code>${trigger.keyword}</code>${trigger.caseSensitive ? ' 🔠' : ''}${trigger.deleteTrigger ? ' 🗑' : ''}`,
+        trigger: trigger => `· <code>${trigger.keyword}</code>${trigger.caseSensitive ? ' 🔠' : ''}${trigger.deleteTrigger ? ' 🗑' : ''}${trigger.regexTrigger ? ' ®️' : ''}`,
         triggers: triggers => triggers.map(texts._templates.trigger).join('\n')
     },
     other: {

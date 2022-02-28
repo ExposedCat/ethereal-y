@@ -29,12 +29,16 @@ const TriggerSchema = new Schema({
     caseSensitive: {
         type: Boolean,
         required: true
+    },
+    regexTrigger: {
+        type: Boolean,
+        required: true
     }
 })
 
 class TriggerClass {
-    static createNew(groupId, keyword, originalMessageId, caseSensitive) {
-        return createNew(Trigger, groupId, keyword, originalMessageId, caseSensitive)
+    static createNew(groupId, keyword, originalMessageId, caseSensitive, regexTrigger) {
+        return createNew(Trigger, groupId, keyword, originalMessageId, caseSensitive, regexTrigger)
     }
     static removeOne(groupId, keyword) {
         return removeOne(Trigger, groupId, keyword)

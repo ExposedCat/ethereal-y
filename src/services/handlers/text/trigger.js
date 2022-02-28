@@ -2,10 +2,11 @@ import { Errors } from '../../../entities/errors.js'
 import { Trigger } from '../../../entities/trigger.js'
 
 
-async function addTrigger(groupId, keyword, originalMessageId, caseSensitive) {
+async function addTrigger(groupId, keyword, originalMessageId, caseSensitive, regexTrigger) {
     await Trigger.createNew(
         groupId,
-        keyword, originalMessageId, caseSensitive
+        keyword, originalMessageId,
+        caseSensitive, regexTrigger
     )
     return {
         error: false,
