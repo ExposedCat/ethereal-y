@@ -56,7 +56,6 @@ async function sendReminder(Reminder) {
         await Reminder.deleteOne({
             reminderId: this.reminderId
         })
-        console.log(`Delete: ${!success} || ${Number(this.date)}`)
     }
 
     return success
