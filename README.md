@@ -11,6 +11,7 @@
 
 `[expression]` - Replace with specified expression without square brackets.  
 `{Reply}` - Requires reply message.
+`{Photo}` - Command must be specified as photo caption (photo must be non-compressed).
 
 ### Roleplay
 
@@ -146,6 +147,16 @@ Restricts specified user.
 
 ```
 /ban
+```
+
+### Add UA flag frame to images
+
+Generates rounded image with ukrainian flag background and frame.
+
+`{Photo}`
+
+```
+/ua_frame
 ```
 
 ## 🏗️ Forking
