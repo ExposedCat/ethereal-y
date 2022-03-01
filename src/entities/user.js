@@ -1,43 +1,41 @@
 import {
-    getOneUser,
-    getUserNames,
-    updateUserData
+	getOneUser,
+	getUserNames,
+	updateUserData
 } from '../services/database/user.js'
 import { creatorId } from '../config/manifest.js'
 import mongoose from 'mongoose'
 const { Schema, model } = mongoose
 
-
 const UserSchema = new Schema({
-    userId: {
-        type: Number,
-        unique: true,
-        required: true
-    },
-    name: {
-        type: String,
-        required: true
-    },
-    fullRights: {
-        type: Boolean,
-        required: true
-    }
+	userId: {
+		type: Number,
+		unique: true,
+		required: true
+	},
+	name: {
+		type: String,
+		required: true
+	},
+	fullRights: {
+		type: Boolean,
+		required: true
+	}
 })
 
 class UserClass {
-    static getOne(userId, name) {
-        return getOneUser(User, userId, name)
-    }
-    static getNames(userIds) {
-        return getUserNames(User, userIds)
-    }
-    updateData(updates) {
-        return updateUserData.bind(this)(User, updates)
-    }
+	static getOne(userId, name) {
+		return getOneUser(User, userId, name)
+	}
+	static getNames(userIds) {
+		return getUserNames(User, userIds)
+	}
+	updateData(updates) {
+		return updateUserData.bind(this)(User, updates)
+	}
 }
 
 UserSchema.loadClass(UserClass)
 const User = model('User', UserSchema)
-
 
 export { User }
