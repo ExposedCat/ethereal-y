@@ -2,6 +2,19 @@ import { Errors } from '../../../entities/errors.js'
 import { Trigger } from '../../../entities/trigger.js'
 
 
+async function isValidRegexTrigger(trigger) {
+    try {
+        new RegExp(regexTrigger)
+        return {
+            error: null
+        }
+    } catch (error) {
+        return {
+            error
+        }
+    }
+}
+
 async function addTrigger(groupId, keyword, originalMessageId, caseSensitive, regexTrigger) {
     await Trigger.createNew(
         groupId,
@@ -39,5 +52,6 @@ export {
     addTrigger,
     getTriggers,
     triggerResponse,
-    removeOneTrigger
+    removeOneTrigger,
+    isValidRegexTrigger
 }

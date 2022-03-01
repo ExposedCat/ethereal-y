@@ -4,7 +4,10 @@ import { sendTextMessage } from '../../services/extensions/context.js'
 
 
 async function extendContext(ctx, next) {
-    ctx.text = (text, extra) => sendTextMessage(ctx, text, extra)
+    ctx.text = (text, extra) => sendTextMessage(ctx, text, Object.assign({
+        parse_mode: 'HTML',
+        extra
+    }))
     await next()
 }
 

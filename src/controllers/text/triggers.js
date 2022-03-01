@@ -2,7 +2,8 @@ import {
     addTrigger,
     getTriggers,
     triggerResponse,
-    removeOneTrigger
+    removeOneTrigger,
+    isValidRegexTrigger
 } from '../../services/handlers/text/trigger.js'
 import { texts } from '../../static/texts.js'
 import { Errors } from '../../entities/errors.js'
@@ -45,9 +46,8 @@ async function addTriggerCommand(ctx) {
     const flag = icon => ctx.match[1].includes(`-${icon} `)
     const regexTrigger = flag('r')
     if (regexTrigger) {
-        try {
-            new RegExp(regexTrigger)
-        } catch (error) {
+        const { error } = isValidRegexTrigger(regexTrigger)
+        if (error !== null) {
             return await ctx.text(texts.errors.regexpError(error))
         }
     }

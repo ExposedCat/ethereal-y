@@ -1,29 +1,31 @@
+import { escapeHTMLChars as plain } from '../services/static-helper.js'
+
 const texts = {
     _templates: {
-        trigger: trigger => `· <code>${trigger.keyword}</code>${trigger.caseSensitive ? ' 🔠' : ''}${trigger.deleteTrigger ? ' 🗑' : ''}${trigger.regexTrigger ? ' ®️' : ''}`,
+        trigger: trigger => `· <code>${plain(trigger.keyword)}</code>${trigger.caseSensitive ? ' 🔠' : ''}${trigger.deleteTrigger ? ' 🗑' : ''}${trigger.regexTrigger ? ' ®️' : ''}`,
         triggers: triggers => triggers.map(texts._templates.trigger).join('\n')
     },
     other: {
-        voteBan: (name, ban) => `Vote for ${ban ? 'ban' : 'mute'} ${name}`,
-        anonymous: messageText => `Someone: «${messageText}»`,
-        greeting: (userId, userName) => `👋 Hello, <a href="tg://user?id=${userId}">${userName}</a>!`,
+        voteBan: (name, ban) => `Vote for ${ban ? 'ban' : 'mute'} ${plain(name)}`,
+        anonymous: messageText => `Someone: «${plain(messageText)}»`,
+        greeting: (userId, userName) => `👋 Hello, <a href="tg://user?id=${userId}">${plain(userName)}</a>!`,
         hints: {
             cron: '<code>/cron * * * * * Pet a loli</code>',
             reminder: '<code>/reminder 31.01 12:00 Pet a loli</code>\n<code>/reminder yesterday 12:00 Pet a loli</code>'
         },
-        notification: text => `🕓 Reminder: «${text}»`,
+        notification: text => `🕓 Reminder: «${plain(text)}»`,
         help: `👋 Hello!\n👨‍💻 Source code: <a href="https://github.com/ExposedCat/ethereal-y">OPEN</a>\n📖 Reference: <a href="https://github.com/ExposedCat/ethereal-y/blob/main/README.md">OPEN</a>\n\nCreated by @ExposedCatDev`
     },
     success: {
         broadcastDone: groupsNumber => `📩 Message sent to ${groupsNumber} groups`,
         triggerList: triggers => `🔗 Bindings:\n${texts._templates.triggers(triggers)}`,
-        userMuted: (userName, minutes) => `💢 ${userName} restricted for ${
+        userMuted: (userName, minutes) => `💢 ${plain(userName)} restricted for ${
             minutes ? `${minutes} minute(s)` : 'forever'
         }`,
-        userBanned: userName => `💢 ${userName} banned`,
-        userRestrictionsRemoved: userName => `😇 All ${userName} restrictions removed`,
+        userBanned: userName => `💢 ${plain(userName)} banned`,
+        userRestrictionsRemoved: userName => `😇 All ${plain(userName)} restrictions removed`,
         triggerAdded: (keyword, deleteTrigger = false) => `✍️ «${keyword}» binding added ${deleteTrigger ? '(🗑)' : ''}`,
-        triggerRemoved: keyword => `🗑 «${keyword}» binding removed`,
+        triggerRemoved: keyword => `🗑 «${plain(keyword)}» binding removed`,
         reminderSet: (date, time) => `✍️ You will be notified at ${date} ${time}`,
         cronSet: (cron, next) => `✍️ You will be notified by time rule: <code>${cron}</code>\nNext notification at: ${next}`
     },
@@ -32,7 +34,7 @@ const texts = {
         cantRestrictUser: `🤨 Can't change permissions of this user`,
         notEnoughUserRights: `😤 You don't have enough rights`,
         notEnoughBotRights: `🤯 Bot doesn't have enough rights`,
-        bindingNotFound: keyword => `🤔 «${keyword}» binding not found`,
+        bindingNotFound: keyword => `🤔 «${plain(keyword)}» binding not found`,
         alreadySubscribed: '🤨 You are already subscribed for or unsubscribed from this reminder',
         unknownCommand: '🤔 Unknown command',
         nonExistentReminder: '🤔 Reminder does not exist',
