@@ -1,14 +1,24 @@
+import path from 'path'
+import { fileURLToPath } from 'url'
 import { Image } from '../../../entities/image/image.js'
 
-const mediaPath = photo => `../../../../media/${photo}`
+function mediaPath(filePath) {
+	const thisUrl = fileURLToPath(import.meta.url)
+	const relativeMediaFolder = '../../../../../media'
+	return path.resolve(thisUrl, relativeMediaFolder, filePath)
+}
 
 async function addFrame(photo, frame, magnification) {
 	try {
-		let image = new Image(mediaPath(photo))
+        const absolutePhotoPath = mediaPath(photo)
+		let image = new Image(absolutePhotoPath)
 		await image.round()
 		await image.addBackground(mediaPath(frame), magnification)
-		await image.write(mediaPath(photo))
-		return { error: null }
+		await image.write(absolutePhotoPath)
+		return {
+            error: null,
+            data: absolutePhotoPath
+        }
 	} catch (error) {
 		return { error }
 	}

@@ -25,7 +25,7 @@ async function downloadFile(url, savePath) {
 
 		return { error: null }
 	} catch (error) {
-		return { error: error.message }
+		return { error }
 	}
 }
 
