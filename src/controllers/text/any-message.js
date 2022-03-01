@@ -1,4 +1,5 @@
 import { Group } from '../../entities/group.js'
+import { texts } from '../../static/texts.js'
 import { processTrigger } from './triggers.js'
 
 function doProcessTrigger(ctx, isGroup) {
