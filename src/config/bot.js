@@ -3,6 +3,7 @@ import Bot from 'telegraf'
 import * as text from '../controllers/text.js'
 import * as button from '../controllers/button.js'
 import { handleNewMembers } from '../controllers/new-members.js'
+import { handlePhoto } from '../controllers/photo/photo.js'
 
 async function extendContextWithSelf(bot) {
 	const self = await bot.telegram.getMe()
@@ -39,6 +40,8 @@ function setupHandlers(bot) {
 
 	bot.on('new_chat_members', handleNewMembers)
 	bot.on('poll', text.handleVote)
+
+	bot.on('photo', handlePhoto)
 }
 
 function setupBot(token) {
