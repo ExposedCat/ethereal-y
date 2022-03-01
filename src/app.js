@@ -10,14 +10,13 @@ import { Group } from './entities/group.js'
 import { Trigger } from './entities/trigger.js'
 import { Reminder } from './entities/reminder.js'
 
-
 console.info('Connecting to database..')
 try {
-    await connectToDatabase(databaseName)
+	await connectToDatabase(databaseName)
 } catch (error) {
-    console.error('CRITICAL: Cannot connect to database:')
-    console.error(error)
-    process.exit()
+	console.error('CRITICAL: Cannot connect to database:')
+	console.error(error)
+	process.exit()
 }
 console.info('Done')
 

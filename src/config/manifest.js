@@ -5,10 +5,4 @@ const databaseName = `ethereal-db`
 // TODO: Move captcha delay to group settings
 const captchaDelay = 30 * 1000
 
-
-export {
-    token,
-    creatorId,
-    databaseName,
-    captchaDelay
-}
+export { token, creatorId, databaseName, captchaDelay }
