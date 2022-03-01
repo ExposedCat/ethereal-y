@@ -69,7 +69,8 @@ Sends specified message when specified keyword is sent (or deletes trigger).
 ```
 #### Add trigger to delete
 `{Reply}`
-`-s` makes trigger case-sensitive
+`-r` use regular expression as trigger
+`-s` makes trigger case-sensitive. Removes `i` flag if `-r` is specified
 ```
 /bind_delete [keyword]
 /bind_delete -s [keyword]
