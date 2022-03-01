@@ -4,7 +4,7 @@ import { downloadPhoto } from '../../services/handlers/photo/download-photo.js'
 import { addFrame } from '../../services/handlers/photo/add-frame.js'
 
 async function handleUaFrameCommand(ctx) {
-    const { file_id: fileId } = ctx.message.photo[0]
+    const { file_id: fileId } = ctx.message.photo[ctx.message.photo.length - 1]
 	const { error } = await downloadPhoto(ctx.telegram, fileId)
 	if (error === null) {
 		const { error, data } = await addFrame(`${fileId}.png`, 'ukraine.jpg', 1.1)
