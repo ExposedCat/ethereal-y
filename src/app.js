@@ -20,6 +20,11 @@ try {
 }
 console.info('Done')
 
+console.info('Scheduling reminders..')
+await Reminder.scheduleAll()
+console.info('Done')
+
+
 console.info('Clearing database..')
 // await Poll.deleteMany()
 // await User.deleteMany()

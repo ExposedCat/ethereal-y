@@ -152,11 +152,25 @@ async function updateSubscriber(Reminder, userId, state) {
 	}
 }
 
+async function scheduleAllReminders(Reminder) {
+	const reminders = await Reminder.find()
+	for (const reminder of reminders) {
+		const isDateTime = reminder.date[10] === 'T'
+		const { job } = await reminder.schedule(isDateTime)
+		if (!job) {
+			await Reminder.deleteOne({
+				reminderId: reminder.reminderId
+			})
+		}
+	}
+}
+
 export {
 	sendReminder,
 	createReminder,
 	getOneReminder,
 	updateSubscriber,
 	scheduleReminder,
-	updateReminderData
+	updateReminderData,
+	scheduleAllReminders
 }
