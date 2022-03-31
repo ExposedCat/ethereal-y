@@ -5,10 +5,8 @@ function keyboard(keyboard, columns = 1) {
 	const inlineKeyboard = Markup.inlineKeyboard(
 		keyboard.map(key => Markup.callbackButton(...key)),
 		{ columns }
-	)
-	return {
-		reply_markup: inlineKeyboard
-	}
+	).extra()
+	return inlineKeyboard
 }
 
 const buttons = {

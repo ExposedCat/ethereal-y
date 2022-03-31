@@ -7,9 +7,8 @@ async function extendContext(ctx, next) {
 		sendTextMessage(
 			ctx,
 			text,
-			Object.assign({
-				parse_mode: 'HTML',
-				extra
+			Object.assign(extra, {
+				parse_mode: 'HTML'
 			})
 		)
 	await next()

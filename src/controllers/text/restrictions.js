@@ -34,6 +34,9 @@ async function voteForBanCommand(ctx) {
 
 async function handleVote(ctx) {
 	const pollData = ctx.poll
+	if (!pollData) {
+		return
+	}
 	const { id } = pollData
 	const yesVotes = pollData.options[0].voter_count
 	const { shouldApply, poll } = await processPollVote(
