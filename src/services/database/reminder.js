@@ -4,6 +4,7 @@ import { User } from '../../entities/user.js'
 
 import { bot } from '../bot.js'
 import { texts } from '../../static/texts.js'
+import { buttons } from '../../static/buttons.js'
 import { Errors } from '../../entities/errors.js'
 import { formDate } from '../handlers/text/reminder.js'
 
@@ -31,13 +32,19 @@ async function sendReminder(Reminder) {
 	}
 	let success = true
 	try {
+		const keyboard = buttons.reminderSubscription(
+			this.reminderId,
+			this.subscribers.length
+		)
 		await bot.telegram.sendMessage(
 			this.chatId,
-			texts.other.notification(this.notification)
+			texts.other.notification(this.notification),
+			keyboard
 		)
 		const subscribers = await User.getNames(this.subscribers)
 		const template = ({ userId, name }) =>
 			`<a href="tg://user?id=${userId}">@${name}</a>`
+
 		const { length } = this.subscribers
 		for (let number = 0; number < length; number += 10) {
 			const usernames = subscribers
@@ -152,11 +159,25 @@ async function updateSubscriber(Reminder, userId, state) {
 	}
 }
 
+async function scheduleAllReminders(Reminder) {
+	const reminders = await Reminder.find()
+	for (const reminder of reminders) {
+		const isDateTime = reminder.date[10] === 'T'
+		const { job } = await reminder.schedule(isDateTime)
+		if (!job) {
+			await Reminder.deleteOne({
+				reminderId: reminder.reminderId
+			})
+		}
+	}
+}
+
 export {
 	sendReminder,
 	createReminder,
 	getOneReminder,
 	updateSubscriber,
 	scheduleReminder,
-	updateReminderData
+	updateReminderData,
+	scheduleAllReminders
 }

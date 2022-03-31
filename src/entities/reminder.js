@@ -7,7 +7,8 @@ import {
 	getOneReminder,
 	updateSubscriber,
 	scheduleReminder,
-	updateReminderData
+	updateReminderData,
+	scheduleAllReminders
 } from '../services/database/reminder.js'
 
 const ReminderSchema = new Schema({
@@ -38,6 +39,9 @@ const ReminderSchema = new Schema({
 class ReminderClass {
 	static getOne(reminderId) {
 		return getOneReminder(Reminder, reminderId)
+	}
+	static scheduleAll() {
+		return scheduleAllReminders(Reminder)
 	}
 	static createNew(data, isDateTime) {
 		return createReminder(data, isDateTime)
