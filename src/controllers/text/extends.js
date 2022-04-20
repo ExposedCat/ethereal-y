@@ -3,7 +3,7 @@ import { Group } from '../../entities/group.js'
 import { sendTextMessage } from '../../services/extensions/context.js'
 
 async function extendContext(ctx, next) {
-	ctx.text = (text, extra) =>
+	ctx.text = (text, extra = {}) =>
 		sendTextMessage(
 			ctx,
 			text,
