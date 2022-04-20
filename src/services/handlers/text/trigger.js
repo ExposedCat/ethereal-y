@@ -1,9 +1,9 @@
 import { Errors } from '../../../entities/errors.js'
 import { Trigger } from '../../../entities/trigger.js'
 
-async function isValidRegexTrigger(trigger) {
+function isValidRegexTrigger(trigger) {
 	try {
-		new RegExp(regexTrigger)
+		new RegExp(trigger)
 		return {
 			error: null
 		}

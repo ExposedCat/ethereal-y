@@ -49,14 +49,14 @@ async function addTriggerCommand(ctx) {
 	}
 	const flag = icon => ctx.match[1].includes(`-${icon} `)
 	const regexTrigger = flag('r')
+	const keyword = ctx.match[2]
 	if (regexTrigger) {
-		const { error } = isValidRegexTrigger(regexTrigger)
+		const { error } = isValidRegexTrigger(keyword)
 		if (error !== null) {
 			return await ctx.text(texts.errors.regexpError(error))
 		}
 	}
 	const caseSensitive = flag('s')
-	const keyword = ctx.match[2]
 	const { error, data } = await addTrigger(
 		ctx.chat.id,
 		keyword,
