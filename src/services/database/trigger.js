@@ -1,4 +1,5 @@
 import { bot } from '../bot.js'
+import { firstMatch } from 'super-regex'
 
 function createNew(
 	Trigger,
@@ -53,7 +54,10 @@ async function triggerResponse(Trigger, groupId, text) {
 		} else {
 			const flags = trigger.caseSensitive ? 'i' : ''
 			const regex = new RegExp(trigger.keyword, flags)
-			triggered = regex.test(text)
+			const match = firstMatch(regex, text, {
+				timeout: 5_000
+			})
+			triggered = match !== undefined
 		}
 		if (triggered) {
 			return {

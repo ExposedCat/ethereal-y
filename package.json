@@ -18,6 +18,7 @@
 		"mongoose": "^6.0.8",
 		"node-schedule": "^2.1.0",
 		"sharp": "^0.30.1",
+		"super-regex": "^0.2.0",
 		"telegraf": "^3.39.0"
 	},
 	"type": "module"

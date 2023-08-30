@@ -1,19 +1,21 @@
-import { Errors } from '../../../entities/errors.js'
+import { firstMatch, matches } from 'super-regex'
 
 async function regexpReplace(text, targetText) {
-	const parser = /(?:([gim]{0,3}))?\/(.+)\/((?:.|)+?)\/$/gm
-	const replacementGroups = text.matchAll(parser)
-	if (!replacementGroups) {
-		return {
-			error: true,
-			data: Errors.invalidSyntax
-		}
-	}
+	const parser = new RegExp(/(?:([gim]{0,3}))?\/(.+)\/((?:.|)+?)\/$/gm)
+	const parsed = matches(parser, text, {
+		timeout: 3_000
+	})
 	let replaced = targetText
-	for (const [_, flags, regexp, replacement] of replacementGroups) {
+	for (const { groups } of parsed) {
+		const [flags, regexp, replacement] = groups;
 		try {
 			const replacer = new RegExp(regexp, flags)
-			replaced = replaced.replace(replacer, replacement)
+			const match = firstMatch(replacer, replaced, {
+				timeout: 5_000
+			})
+			if (match !== undefined) {
+				replaced = replaced.replace(replacer, replacement)
+			}
 		} catch (error) {
 			return {
 				error: true,
