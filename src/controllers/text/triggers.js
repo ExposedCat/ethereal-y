@@ -120,10 +120,18 @@ async function processTrigger(chatId, text, replyMessageId, api) {
 		return false
 	}
 	if (trigger.deleteTrigger) {
-		return await api.deleteMessage(chatId, replyMessageId)
+		await api.deleteMessage(chatId, replyMessageId)
 	} else {
-		return await trigger.send(replyMessageId)
+		const shouldRemove = await trigger.send(replyMessageId)
+		if (shouldRemove) {
+			await api.sendMessage(
+				chatId,
+				`Original trigger response message was deleted, so trigger "${trigger.keyword}" is deleted now`
+			)
+			await removeOneTrigger(chatId, trigger.keyword)
+		}
 	}
+	return true
 }
 
 export {

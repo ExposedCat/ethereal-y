@@ -25,13 +25,13 @@ await Reminder.scheduleAll()
 console.info('Done')
 
 
-console.info('Clearing database..')
+// console.info('Clearing database..')
 // await Poll.deleteMany()
 // await User.deleteMany()
 // await Group.deleteMany()
 // await Trigger.deleteMany()
 // await Reminder.deleteMany()
-console.info('Done')
+// console.info('Done')
 
 console.info('Starting bot..')
 bot.launch()

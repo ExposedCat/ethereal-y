@@ -83,7 +83,11 @@ async function sendTriggerMessage(replyMessageId) {
 				allow_sending_without_reply: true
 			}
 		)
+		return false
 	} catch (error) {
+		if (error.message.includes('message to copy not found')) {
+			return true
+		}
 		console.error(`Can't send binded message: `)
 		console.trace(error)
 	}
