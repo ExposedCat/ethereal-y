@@ -105,7 +105,10 @@ async function mentionEveryoneCommand(ctx) {
 		userPack
 			.map(user => `<a href="tg://user?id=${user.userId}">@${user.name}</a>`)
 			.join(' '),
-		{ reply_to_message_id: ctx.message.message_id }
+		{
+			reply_to_message_id: ctx.message.message_id,
+			parse_mode: 'HTML'
+		}
 	)
 
 	try {
