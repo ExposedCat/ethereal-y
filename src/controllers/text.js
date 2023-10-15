@@ -8,6 +8,9 @@ import { action } from '../services/handlers/text/action.js'
 import { getGroupIds } from '../services/handlers/text/broadcast.js'
 import { regexpReplace } from '../services/handlers/text/regexp-replace.js'
 import { anonymousMessage } from '../services/handlers/text/anonymous-message.js'
+import { getOneGroup } from '../services/database/group.js'
+import { Group } from '../entities/group.js'
+import { User } from '../entities/user.js'
 
 async function startCommand(ctx) {
 	const response = await start(ctx.user)
@@ -93,6 +96,36 @@ async function anonymousMessageCommand(ctx) {
 	}
 }
 
+async function mentionEveryoneCommand(ctx) {
+	const group = await Group.getOne(ctx.chat.id, ctx.chat.title)
+	const userIds = group?.users ?? []
+	const users = await User.getNames(userIds)
+
+	const sendPack = userPack => ctx.reply(
+		userPack
+			.map(user => `<a href="tg://user?id=${user.userId}">@${user.name}</a>`)
+			.join(' '),
+		{ reply_to_message_id: ctx.message.message_id }
+	)
+
+	try {
+		let pack = []
+		for (const user of users) {
+			pack.push(user)
+			if (pack.length === 10) {
+					await sendPack(pack)
+					pack = []
+			}
+		}
+		if (pack.length) {
+			await sendPack(pack)
+		}
+	} catch {
+		// NOTE: Message was deleted
+		return
+	}
+}
+
 export {
 	handleVote,
 	restrictCommand,
@@ -119,5 +152,6 @@ export {
 	actionCommand,
 	broadcastCommand,
 	regexReplaceCommand,
-	anonymousMessageCommand
+	anonymousMessageCommand,
+	mentionEveryoneCommand
 }

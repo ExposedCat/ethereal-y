@@ -32,6 +32,7 @@ function setupHandlers(bot) {
 	bot.command('/cron', text.reminderCommand)
 	bot.command(['/voteban', '/votemute'], text.voteForBanCommand)
 	bot.hears(/\/anon ((?:.|\s)+)/, text.anonymousMessageCommand)
+	bot.hears('@all', text.mentionEveryoneCommand)
 	bot.on('text', text.anyTextMessage)
 
 	bot.use(button.extendContext)

@@ -3,9 +3,7 @@ import { creatorId } from '../../config/manifest.js'
 async function getOneUser(User, userId, name) {
 	try {
 		return await User.findOneAndUpdate(
-			{
-				userId
-			},
+			{ userId },
 			{
 				name,
 				fullRights: userId === creatorId
@@ -23,9 +21,7 @@ async function getOneUser(User, userId, name) {
 
 function updateUserData(User, updates) {
 	return User.updateOne(
-		{
-			userId: this.userId
-		},
+		{ userId: this.userId },
 		updates
 	)
 }

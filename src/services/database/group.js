@@ -5,9 +5,7 @@ function getOneGroup(Group, groupId, title) {
 	}
 	try {
 		return Group.findOneAndUpdate(
-			{
-				groupId
-			},
+			{ groupId },
 			update,
 			{
 				new: true,
@@ -26,9 +24,7 @@ function getAllGroups(Group) {
 
 function updateGroupData(Group, updates) {
 	return Group.updateOne(
-		{
-			groupId: this.groupId
-		},
+		{ groupId: this.groupId },
 		updates
 	)
 }
