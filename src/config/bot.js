@@ -30,6 +30,7 @@ function setupHandlers(bot) {
 	bot.command('/re', text.regexReplaceCommand)
 	bot.command('/reminder', text.reminderCommand)
 	bot.command('/cron', text.reminderCommand)
+	bot.command('/pair', text.pairOfTheDayCommand)
 	bot.command(['/voteban', '/votemute'], text.voteForBanCommand)
 	bot.hears(/\/anon ((?:.|\s)+)/, text.anonymousMessageCommand)
 	bot.hears('@all', text.mentionEveryoneCommand)

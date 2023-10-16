@@ -18,6 +18,18 @@ const GroupSchema = new Schema({
 	users: {
 		type: [Number],
 		required: true
+	},
+	lastPair: {
+		type: new Schema({
+			date: Date,
+			firstUserId: String,
+			secondUserId: String
+		}),
+		default: () => ({
+			date: new Date(2004),
+			firstUserId: 0,
+			secondUserId: 0
+		})
 	}
 })
 

@@ -137,6 +137,8 @@ export {
 
 export { extendContext, processTextMessage } from './text/extends.js'
 
+export { pairOfTheDayCommand } from './text/daily-pair.js'
+
 export {
 	removeOneTrigger,
 	addTriggerCommand,
