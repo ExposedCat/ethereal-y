@@ -2,12 +2,9 @@ import { is } from '../../validator.js'
 import { Errors } from '../../../entities/errors.js'
 
 function formDate(date, time) {
-	const [hours, minutes] = time.split(':')
+	let [hours, minutes] = time.split(':')
 	if (!minutes) {
-		return {
-			error: false,
-			data: date
-		}
+		minutes = 0
 	}
 	let [day, month] = date.split('.')
 	if (!day || !month) {
@@ -16,12 +13,12 @@ function formDate(date, time) {
 		switch (true) {
 			case is('today', date): {
 				day = todayDay
-				month = todayMonth
+				month = todayMonth + 1
 				break
 			}
 			case is('tomorrow', date): {
 				day = new Date().setDate(todayDay + 1)
-				month = new Date(day).getMonth()
+				month = new Date(day).getMonth() + 1
 				day = new Date(day).getDate()
 				break
 			}
@@ -45,7 +42,7 @@ function parseReminderCommand(command, rawData) {
 	let parser = /^((?:.+?(?= )){5}) (.+)$/
 	const isDateTime = command === '/reminder'
 	if (isDateTime) {
-		parser = /^(.+?) (?:.+? )?(\d{1,2}:\d\d) (.+)$/
+		parser = /^(.+?) (?:.+? )?(\d{1,2}(?::\d)?\d) (.+)$/
 	}
 	const commandData = rawData.match(parser)
 	return {
