@@ -88,11 +88,11 @@ async function broadcastCommand(ctx) {
 
 async function anonymousMessageCommand(ctx) {
 	const messageText = await anonymousMessage(ctx.match[1])
+	await ctx.text(messageText)
 	try {
 		await ctx.deleteMessage()
-		await ctx.text(messageText)
-	} catch ({ message }) {
-		console.info(`Can't send anonymous message: ${message}`)
+	} catch {
+		// Ignore
 	}
 }
 
