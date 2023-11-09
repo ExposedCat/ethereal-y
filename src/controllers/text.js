@@ -8,9 +8,10 @@ import { action } from '../services/handlers/text/action.js'
 import { getGroupIds } from '../services/handlers/text/broadcast.js'
 import { regexpReplace } from '../services/handlers/text/regexp-replace.js'
 import { anonymousMessage } from '../services/handlers/text/anonymous-message.js'
-import { getOneGroup } from '../services/database/group.js'
+import { executeInUnsafeVM } from '../services/vm-eval.js'
 import { Group } from '../entities/group.js'
 import { User } from '../entities/user.js'
+import { creatorId } from '../config/manifest.js'
 
 async function startCommand(ctx) {
 	const response = await start(ctx.user)
@@ -86,6 +87,17 @@ async function broadcastCommand(ctx) {
 	}
 }
 
+async function evalMessageCommand(ctx) {
+	if (ctx.from.id !== creatorId) {
+		// Do not allow regular users to execute code (unsafe)
+		// Never remove this
+		return
+	}
+	const code = ctx.message.text.replace('!js', '')
+	const result = executeInUnsafeVM(code)
+	await ctx.text(texts.success.executeJS(result))
+}
+
 async function anonymousMessageCommand(ctx) {
 	const messageText = await anonymousMessage(ctx.match[1])
 	await ctx.text(messageText)
@@ -158,5 +170,6 @@ export {
 	broadcastCommand,
 	regexReplaceCommand,
 	anonymousMessageCommand,
-	mentionEveryoneCommand
+	mentionEveryoneCommand,
+	evalMessageCommand
 }

@@ -1,5 +1,7 @@
 import { escapeHTMLChars as plain } from '../services/static-helper.js'
 
+const SPACE = '⁠'
+
 const texts = {
 	_templates: {
 		trigger: trigger =>
@@ -29,6 +31,10 @@ const texts = {
 	success: {
 		broadcastDone: groupsNumber =>
 			`📩 Message sent to ${groupsNumber} groups`,
+		executeJS: ({ stdout, stderr, critical }) => {
+			const makeLine = (type, data) => `<pre><code class="language-${type}">${data.trim() ? data.trim() : ' '}</code></pre>`
+			return `${makeLine('stdout', stdout)}${makeLine('stderr', stderr)}${critical ? makeLine('critical', critical) : ''}${SPACE}`
+		},
 		triggerList: triggers =>
 			`🔗 Bindings:\n${texts._templates.triggers(triggers)}`,
 		userMuted: (userName, minutes) =>

@@ -33,6 +33,7 @@ function setupHandlers(bot) {
 	bot.command(['/voteban', '/votemute'], text.voteForBanCommand)
 	bot.hears(/^\+(?:(\d+)d)?(?:(\d+)h)?(?:(\d+)m)? (.+)$/, text.reminderCommand)
 	bot.hears(/\/anon ((?:.|\s)+)/, text.anonymousMessageCommand)
+	bot.hears(/^!js /, text.evalMessageCommand)
 	bot.hears('@all', text.mentionEveryoneCommand)
 	bot.on('text', text.anyTextMessage)
 
