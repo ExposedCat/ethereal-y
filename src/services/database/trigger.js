@@ -52,7 +52,7 @@ async function triggerResponse(Trigger, groupId, text) {
 			}
 			triggered = finalText.includes(finalKeyword)
 		} else {
-			const flags = trigger.caseSensitive ? 'i' : ''
+			const flags = trigger.caseSensitive ? '' : 'i'
 			const regex = new RegExp(trigger.keyword, flags)
 			const match = firstMatch(regex, text, {
 				timeout: 5_000
