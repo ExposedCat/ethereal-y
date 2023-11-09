@@ -4,8 +4,6 @@ import { buttons } from '../../static/buttons.js'
 import { Errors } from '../../entities/errors.js'
 import { Reminder } from '../../entities/reminder.js'
 
-import { parseReminderCommand } from '../../services/handlers/text/reminder.js'
-
 async function createNotification(ctx, commandData, isDateTime) {
 	const [_, date, time, notification] = commandData
 	const reminderData = {
@@ -41,12 +39,21 @@ async function createNotification(ctx, commandData, isDateTime) {
 }
 
 async function reminderCommand(ctx) {
-	const data = parseReminderCommand(ctx.command, ctx.rawData)
-	const { commandData, isDateTime } = data
-	if (!commandData) {
-		await ctx.text(texts.errors.invalidArguments(ctx.command.slice(1)))
-	} else {
-		await createNotification(ctx, commandData, isDateTime)
+	if (ctx.match) {
+		const isReminder = ctx.match.slice(1, 4).some(Boolean)
+		if (!isReminder) {
+			return
+		}
+
+		const now = new Date()
+		const year = now.getFullYear()
+		const month = now.getMonth()
+		const days = now.getDate() + Number(ctx.match[1] ?? 0) || 0
+		const hours = now.getHours() + Number(ctx.match[2] ?? 0) || 0
+		const minutes = now.getMinutes() + Number(ctx.match[3] ?? 0) || 0
+		const date = new Date(year, month, days, hours, minutes)
+
+		await createNotification(ctx, [null, date, null, ctx.match[4]], true)
 	}
 }
 

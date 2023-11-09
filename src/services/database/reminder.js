@@ -87,11 +87,16 @@ async function createReminder(
 	{ Reminder, chatId, userId, messageId, date, time, notification },
 	isDateTime
 ) {
-	const { error, data: formedDate } = formDate(date, time)
-	if (error) {
-		return { error, data: formedDate }
+	let stringDate
+	if (isDateTime) {
+		stringDate = date.toISOString()
+	} else {
+		const { error, data: formedDate } = formDate(date, time)
+		if (error) {
+			return { error, data: formedDate }
+		}
+		stringDate = isDateTime ? formedDate.toISOString() : formedDate
 	}
-	const stringDate = isDateTime ? formedDate.toISOString() : formedDate
 	const newReminder = await Reminder.create({
 		chatId,
 		notification,
@@ -115,12 +120,12 @@ async function createReminder(
 		nextInvocation: void 0,
 		reminderId: newReminder.reminderId
 	}
-	if (typeof formedDate === 'string') {
-		reminderData.date = formedDate
-		reminderData.nextInvocation = job.nextInvocation().toDate()
+	if (isDateTime) {
+		reminderData.date = new Date(stringDate).toLocaleDateString('RU')
+		reminderData.time = new Date(stringDate).toLocaleTimeString('RU')
 	} else {
-		reminderData.date = formedDate.toLocaleDateString('RU')
-		reminderData.time = formedDate.toLocaleTimeString('RU')
+		reminderData.date = stringDate
+		reminderData.nextInvocation = job.nextInvocation().toDate()
 	}
 	return {
 		error: false,

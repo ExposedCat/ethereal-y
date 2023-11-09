@@ -31,7 +31,7 @@ function setupHandlers(bot) {
 	bot.command('/cron', text.reminderCommand)
 	bot.command('/pair', text.pairOfTheDayCommand)
 	bot.command(['/voteban', '/votemute'], text.voteForBanCommand)
-	bot.hears(/^\+(\d+d)?(\d+h)?(\d+m)?$/, text.reminderCommand)
+	bot.hears(/^\+(?:(\d+)d)?(?:(\d+)h)?(?:(\d+)m)? (.+)$/, text.reminderCommand)
 	bot.hears(/\/anon ((?:.|\s)+)/, text.anonymousMessageCommand)
 	bot.hears('@all', text.mentionEveryoneCommand)
 	bot.on('text', text.anyTextMessage)

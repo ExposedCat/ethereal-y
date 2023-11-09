@@ -38,17 +38,4 @@ function formDate(date, time) {
 	}
 }
 
-function parseReminderCommand(command, rawData) {
-	let parser = /^((?:.+?(?= )){5}) (.+)$/
-	const isDateTime = command === '/reminder'
-	if (isDateTime) {
-		parser = /^(.+?) (?:.+? )?(\d{1,2}(?::\d)?\d) (.+)$/
-	}
-	const commandData = rawData.match(parser)
-	return {
-		isDateTime,
-		commandData
-	}
-}
-
-export { formDate, parseReminderCommand }
+export { formDate }
