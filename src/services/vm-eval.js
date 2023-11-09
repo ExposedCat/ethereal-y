@@ -1,7 +1,7 @@
 import vm from 'node:vm'
 import stream from 'node:stream'
 
-export function executeInUnsafeVM(code) {
+export function executeInUnsafeVM(code, ctx) {
   const result = { stdout: '', stderr: '', critical: '' }
   try {
     const createWriter = type => (chunk, encoding, callback) => {
@@ -18,6 +18,7 @@ export function executeInUnsafeVM(code) {
     const stderrStream = new stream.Writable({ write: createWriter('stderr') });
 
     const context = {
+      ctx,
       console: new console.Console(stdoutStream, stderrStream)
     };
 

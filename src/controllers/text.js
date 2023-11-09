@@ -94,7 +94,7 @@ async function evalMessageCommand(ctx) {
 		return
 	}
 	const code = ctx.message.text.replace('!js', '')
-	const result = executeInUnsafeVM(code)
+	const result = executeInUnsafeVM(code, ctx)
 	await ctx.text(texts.success.executeJS(result))
 }
 
