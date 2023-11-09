@@ -8,13 +8,14 @@ import {
 import { texts } from '../../static/texts.js'
 import { Errors } from '../../entities/errors.js'
 import { getRights } from '../../services/rules.js'
+import { creatorId } from '../../config/manifest.js'
 
 // TODO: Add ability to restrict triggers to be managed only
 // by group admins and make it configurable via group settings
 
 async function addDeleteTriggerCommand(ctx) {
 	const { isAdmin } = await getRights(ctx.telegram, ctx.chat.id, ctx.from.id)
-	if (!isAdmin) {
+	if (!isAdmin && ctx.from.id !== creatorId) {
 		await ctx.text(texts.errors.notEnoughUserRights)
 		return
 	}
@@ -39,7 +40,7 @@ async function addDeleteTriggerCommand(ctx) {
 
 async function addTriggerCommand(ctx) {
 	const { isAdmin } = await getRights(ctx.telegram, ctx.chat.id, ctx.from.id)
-	if (!isAdmin) {
+	if (!isAdmin && ctx.from.id !== creatorId) {
 		await ctx.text(texts.errors.notEnoughUserRights)
 		return
 	}
@@ -77,7 +78,7 @@ async function addTriggerCommand(ctx) {
 
 async function removeTriggerCommand(ctx) {
 	const { isAdmin } = await getRights(ctx.telegram, ctx.chat.id, ctx.from.id)
-	if (!isAdmin) {
+	if (!isAdmin && ctx.from.id !== creatorId) {
 		await ctx.text(texts.errors.notEnoughUserRights)
 		return
 	}
