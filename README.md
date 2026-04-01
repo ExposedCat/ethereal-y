@@ -168,4 +168,18 @@ rm -r .git
 npm install
 ```
 
-Set `TOKEN` environment variable and run bot with `npm start`
+Copy `.env.example` to `.env`, set `TOKEN`, then run bot with `npm start`
+
+## 🐋 Containers
+
+```
+cp .env.example .env
+# edit TOKEN in .env
+docker compose up --build -d
+```
+
+Stop:
+
+```
+docker compose down
+```

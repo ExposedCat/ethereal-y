@@ -1,0 +1,29 @@
+services:
+  ethereal_y_db:
+    image: docker.io/library/mongo:7
+    restart: unless-stopped
+    volumes:
+      - ethereal-y-mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand({ ping: 1 })"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  ethereal_y_app:
+    build:
+      context: .
+      dockerfile: Containerfile
+    restart: unless-stopped
+    depends_on:
+      ethereal_y_db:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      DB_CONNECTION_STRING: mongodb://ethereal_y_db:27017/ethereal-db
+    init: true
+
+volumes:
+  ethereal-y-mongo-data:
