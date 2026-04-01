@@ -1,41 +1,41 @@
+import mongoose from "mongoose";
 import {
 	getOneUser,
 	getUserNames,
-	updateUserData
-} from '../services/database/user.js'
-import { creatorId } from '../config/manifest.js'
-import mongoose from 'mongoose'
-const { Schema, model } = mongoose
+	updateUserData,
+} from "../services/database/user.js";
+
+const { Schema, model } = mongoose;
 
 const UserSchema = new Schema({
 	userId: {
 		type: Number,
 		unique: true,
-		required: true
+		required: true,
 	},
 	name: {
 		type: String,
-		required: true
+		required: true,
 	},
 	fullRights: {
 		type: Boolean,
-		required: true
-	}
-})
+		required: true,
+	},
+});
 
 class UserClass {
 	static getOne(userId, name) {
-		return getOneUser(User, userId, name)
+		return getOneUser(User, userId, name);
 	}
 	static getNames(userIds) {
-		return getUserNames(User, userIds)
+		return getUserNames(User, userIds);
 	}
 	updateData(updates) {
-		return updateUserData.bind(this)(User, updates)
+		return updateUserData.bind(this)(User, updates);
 	}
 }
 
-UserSchema.loadClass(UserClass)
-const User = model('User', UserSchema)
+UserSchema.loadClass(UserClass);
+const User = model("User", UserSchema);
 
-export { User }
+export { User };

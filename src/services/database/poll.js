@@ -1,33 +1,33 @@
 async function getOnePoll(Poll, pollId) {
-	return await Poll.findOne({ pollId })
+	return await Poll.findOne({ pollId });
 }
 
 async function applyPollAction(Poll, ctx) {
 	await Poll.deleteOne({
-		_id: this._id
-	})
-	const action = this.ban ? 'kick' : 'restrict'
-	const method = `${action}ChatMember`
+		_id: this._id,
+	});
+	const action = this.ban ? "kick" : "restrict";
+	const method = `${action}ChatMember`;
 	try {
-		await ctx.telegram.stopPoll(this.chatId, this.messageId)
+		await ctx.telegram.stopPoll(this.chatId, this.messageId);
 		await ctx.telegram[method](this.chatId, this.targetId, {
-			can_send_messages: false
-		})
-		return true
+			can_send_messages: false,
+		});
+		return true;
 	} catch ({ message }) {
-		console.info(`Can't apply poll action: ${message}`)
+		console.info(`Can't apply poll action: ${message}`);
 		// Never mind if can't apply action
-		return false
+		return false;
 	}
 }
 
 function updatePollData(Poll, updates) {
 	return Poll.updateOne(
 		{
-			_id: this._id
+			_id: this._id,
 		},
-		updates
-	)
+		updates,
+	);
 }
 
-export { getOnePoll, updatePollData, applyPollAction }
+export { applyPollAction, getOnePoll, updatePollData };

@@ -1,7 +1,7 @@
-import { texts } from '../../../static/texts.js'
+import { texts } from "../../../static/texts.js";
 
 async function anonymousMessage(messageText) {
-	return texts.other.anonymous(messageText)
+	return texts.other.anonymous(messageText);
 }
 
-export { anonymousMessage }
+export { anonymousMessage };

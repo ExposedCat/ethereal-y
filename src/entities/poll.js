@@ -1,48 +1,49 @@
+import mongoose from "mongoose";
 import {
+	applyPollAction,
 	getOnePoll,
 	updatePollData,
-	applyPollAction
-} from '../services/database/poll.js'
-import mongoose from 'mongoose'
-const { Schema, model } = mongoose
+} from "../services/database/poll.js";
+
+const { Schema, model } = mongoose;
 
 const PollSchema = new Schema({
 	pollId: {
 		type: String,
 		unique: true,
-		required: true
+		required: true,
 	},
 	chatId: {
 		type: Number,
-		required: true
+		required: true,
 	},
 	targetId: {
 		type: Number,
-		required: true
+		required: true,
 	},
 	messageId: {
 		type: Number,
-		required: true
+		required: true,
 	},
 	ban: {
 		type: Boolean,
-		required: true
-	}
-})
+		required: true,
+	},
+});
 
 class PollClass {
 	static getOne(pollId) {
-		return getOnePoll(Poll, pollId)
+		return getOnePoll(Poll, pollId);
 	}
 	updateData(updates) {
-		return updatePollData.bind(this)(Poll, updates)
+		return updatePollData.bind(this)(Poll, updates);
 	}
 	apply(ctx) {
-		return applyPollAction.bind(this)(Poll, ctx)
+		return applyPollAction.bind(this)(Poll, ctx);
 	}
 }
 
-PollSchema.loadClass(PollClass)
-const Poll = model('Poll', PollSchema)
+PollSchema.loadClass(PollClass);
+const Poll = model("Poll", PollSchema);
 
-export { Poll }
+export { Poll };

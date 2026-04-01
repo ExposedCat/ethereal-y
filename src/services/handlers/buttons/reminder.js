@@ -1,16 +1,16 @@
-import { Errors } from '../../../entities/errors.js'
-import { Reminder } from '../../../entities/reminder.js'
+import { Errors } from "../../../entities/errors.js";
+import { Reminder } from "../../../entities/reminder.js";
 
 async function subscribe(userId, reminderId, state) {
-	const reminder = await Reminder.getOne(reminderId)
+	const reminder = await Reminder.getOne(reminderId);
 	if (reminder) {
-		return reminder.updateSubscriber(userId, state)
+		return reminder.updateSubscriber(userId, state);
 	} else {
 		return {
 			error: true,
-			data: Errors.nonExistentReminder
-		}
+			data: Errors.nonExistentReminder,
+		};
 	}
 }
 
-export { subscribe }
+export { subscribe };

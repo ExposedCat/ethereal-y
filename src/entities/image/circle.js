@@ -1,6 +1,6 @@
-import sharp from 'sharp'
+import sharp from "sharp";
 
-const Circle = size =>
+const Circle = (size) =>
 	sharp(
 		Buffer.from(
 			`<svg viewBox="0 0 ${size} ${size}">
@@ -10,8 +10,8 @@ const Circle = size =>
                     r="${size / 2}"
                 />
             </svg>`,
-			'utf-8'
-		)
-	)
+			"utf-8",
+		),
+	);
 
-export { Circle }
+export { Circle };

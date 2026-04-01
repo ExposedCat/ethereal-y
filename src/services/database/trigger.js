@@ -1,5 +1,5 @@
-import { bot } from '../bot.js'
-import { firstMatch } from 'super-regex'
+import { firstMatch } from "super-regex";
+import { bot } from "../bot.js";
 
 function createNew(
 	Trigger,
@@ -7,69 +7,69 @@ function createNew(
 	keyword,
 	originalMessageId,
 	caseSensitive,
-	regexTrigger
+	regexTrigger,
 ) {
 	return Trigger.findOneAndUpdate(
 		{
 			groupId,
-			keyword
+			keyword,
 		},
 		{
 			originalMessageId,
 			deleteTrigger: originalMessageId === null,
 			caseSensitive,
-			regexTrigger
+			regexTrigger,
 		},
 		{
 			upsert: true,
 			new: true,
-			setDefaultsOnInsert: true
-		}
-	)
+			setDefaultsOnInsert: true,
+		},
+	);
 }
 
 function removeOne(Trigger, groupId, keyword) {
 	return Trigger.deleteOne({
 		groupId,
-		keyword
-	})
+		keyword,
+	});
 }
 
 function getForGroup(Trigger, groupId) {
-	return Trigger.find({ groupId })
+	return Trigger.find({ groupId });
 }
 
 async function triggerResponse(Trigger, groupId, text) {
-	const triggers = await Trigger.find({ groupId })
+	const triggers = await Trigger.find({ groupId });
 	for (const trigger of triggers) {
-		let triggered = false
+		let triggered = false;
 		if (!trigger.regexTrigger) {
-			let finalText = text
-			let finalKeyword = trigger.keyword
+			let finalText = text;
+			let finalKeyword = trigger.keyword;
 			if (!trigger.caseSensitive) {
-				finalText = finalText.toLowerCase()
-				finalKeyword = finalKeyword.toLowerCase()
+				finalText = finalText.toLowerCase();
+				finalKeyword = finalKeyword.toLowerCase();
 			}
-			triggered = finalText.includes(finalKeyword)
+			triggered = finalText.includes(finalKeyword);
 		} else {
-			const flags = trigger.caseSensitive ? '' : 'i'
-			const regex = new RegExp(trigger.keyword, flags)
+			const flags = trigger.caseSensitive ? "" : "i";
+			const regex = new RegExp(trigger.keyword, flags);
 			const match = firstMatch(regex, text, {
-				timeout: 5_000
-			})
-			triggered = match !== undefined
+				timeout: 5_000,
+			});
+			triggered = match !== undefined;
 		}
 		if (triggered) {
 			return {
 				error: false,
-				data: trigger
-			}
+				data: trigger,
+			};
 		}
 	}
 	return {
 		error: true,
-		data: null
-	}
+		data: null,
+	};
 }
 
 async function sendTriggerMessage(replyMessageId) {
@@ -80,23 +80,23 @@ async function sendTriggerMessage(replyMessageId) {
 			this.originalMessageId,
 			{
 				reply_to_message_id: replyMessageId,
-				allow_sending_without_reply: true
-			}
-		)
-		return false
+				allow_sending_without_reply: true,
+			},
+		);
+		return false;
 	} catch (error) {
-		if (error.message.includes('message to copy not found')) {
-			return true
+		if (error.message.includes("message to copy not found")) {
+			return true;
 		}
-		console.error(`Can't send binded message: `)
-		console.trace(error)
+		console.error(`Can't send binded message: `);
+		console.trace(error);
 	}
 }
 
 export {
 	createNew,
-	removeOne,
 	getForGroup,
+	removeOne,
+	sendTriggerMessage,
 	triggerResponse,
-	sendTriggerMessage
-}
+};

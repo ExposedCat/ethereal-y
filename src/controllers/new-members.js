@@ -1,13 +1,13 @@
-import { scheduleCaptchaInvalidation } from '../services/handlers/new-members/captcha.js'
-import { texts } from '../static/texts.js'
-import { Group } from '../entities/group.js'
-import { buttons } from '../static/buttons.js'
-import { restrictParticipant } from '../services/restrict.js'
+import { Group } from "../entities/group.js";
+import { scheduleCaptchaInvalidation } from "../services/handlers/new-members/captcha.js";
+import { restrictParticipant } from "../services/restrict.js";
+import { buttons } from "../static/buttons.js";
+import { texts } from "../static/texts.js";
 
 async function handleNewMembers(ctx) {
-	const group = await Group.getOne(ctx.chat.id, ctx.chat.title)
-	const newMembers = ctx.message.new_chat_members
-	const isInvited = newMembers[0].id !== ctx.from.id
+	const group = await Group.getOne(ctx.chat.id, ctx.chat.title);
+	const newMembers = ctx.message.new_chat_members;
+	const isInvited = newMembers[0].id !== ctx.from.id;
 	// TODO: Make captcha validation optional with group settings
 	// TODO: Move captcha texts to group settings
 	// TODO: Add group setting to mute user-bots instead of ban
@@ -15,46 +15,46 @@ async function handleNewMembers(ctx) {
 	// TODO: Move greeting content to group settings
 	const keyboard = (id, registered) => {
 		if (isInvited || registered) {
-			return {}
+			return {};
 		} else {
-			return buttons.captcha(id)
+			return buttons.captcha(id);
 		}
-	}
+	};
 	for (const newMember of newMembers) {
 		if (newMember.id === ctx.self?.id) {
-			continue
+			continue;
 		}
 		const userRegistered = await Group.exists({
 			groupId: ctx.chat.id,
-			users: ctx.from.id
-		})
+			users: ctx.from.id,
+		});
 		const greeting = await ctx.text(
 			texts.other.greeting(newMember.id, newMember.first_name),
-			keyboard(newMember.id, userRegistered)
-		)
+			keyboard(newMember.id, userRegistered),
+		);
 		if (isInvited || userRegistered) {
 			await group.updateData({
 				$addToSet: {
-					users: newMember.id
-				}
-			})
-			return
+					users: newMember.id,
+				},
+			});
+			return;
 		}
-		const { error } = await restrictParticipant('mute', {
+		const { error } = await restrictParticipant("mute", {
 			api: ctx.telegram,
 			chatId: ctx.chat.id,
-			userId: newMember.id
-		})
+			userId: newMember.id,
+		});
 		if (error) {
-			return
+			return;
 		}
 		await scheduleCaptchaInvalidation({
 			api: ctx.telegram,
 			chatId: ctx.chat.id,
 			greetingId: greeting.message_id,
-			userId: newMembers[0].id
-		})
+			userId: newMembers[0].id,
+		});
 	}
 }
 
-export { handleNewMembers }
+export { handleNewMembers };

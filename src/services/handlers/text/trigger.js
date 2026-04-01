@@ -1,16 +1,16 @@
-import { Errors } from '../../../entities/errors.js'
-import { Trigger } from '../../../entities/trigger.js'
+import { Errors } from "../../../entities/errors.js";
+import { Trigger } from "../../../entities/trigger.js";
 
 function isValidRegexTrigger(trigger) {
 	try {
-		new RegExp(trigger)
+		new RegExp(trigger);
 		return {
-			error: null
-		}
+			error: null,
+		};
 	} catch (error) {
 		return {
-			error
-		}
+			error,
+		};
 	}
 }
 
@@ -19,45 +19,45 @@ async function addTrigger(
 	keyword,
 	originalMessageId,
 	caseSensitive,
-	regexTrigger
+	regexTrigger,
 ) {
 	await Trigger.createNew(
 		groupId,
 		keyword,
 		originalMessageId,
 		caseSensitive,
-		regexTrigger
-	)
+		regexTrigger,
+	);
 	return {
 		error: false,
-		data: null
-	}
+		data: null,
+	};
 }
 
 async function getTriggers(groupId) {
-	const triggers = await Trigger.getForGroup(groupId)
+	const triggers = await Trigger.getForGroup(groupId);
 	return {
 		error: false,
-		data: triggers
-	}
+		data: triggers,
+	};
 }
 
 async function removeOneTrigger(groupId, keyword) {
-	const { deletedCount } = await Trigger.removeOne(groupId, keyword)
+	const { deletedCount } = await Trigger.removeOne(groupId, keyword);
 	return {
 		error: !deletedCount,
-		data: deletedCount ? null : Errors.bindingNotFound
-	}
+		data: deletedCount ? null : Errors.bindingNotFound,
+	};
 }
 
 function triggerResponse(groupId, text) {
-	return Trigger.triggerResponse(groupId, text)
+	return Trigger.triggerResponse(groupId, text);
 }
 
 export {
 	addTrigger,
 	getTriggers,
-	triggerResponse,
+	isValidRegexTrigger,
 	removeOneTrigger,
-	isValidRegexTrigger
-}
+	triggerResponse,
+};

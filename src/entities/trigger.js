@@ -1,39 +1,40 @@
+import mongoose from "mongoose";
 import {
 	createNew,
-	removeOne,
 	getForGroup,
+	removeOne,
+	sendTriggerMessage,
 	triggerResponse,
-	sendTriggerMessage
-} from '../services/database/trigger.js'
-import mongoose from 'mongoose'
-const { Schema, model } = mongoose
+} from "../services/database/trigger.js";
+
+const { Schema, model } = mongoose;
 
 const TriggerSchema = new Schema({
 	groupId: {
 		type: Number,
-		required: true
+		required: true,
 	},
 	originalMessageId: {
-		type: Number
+		type: Number,
 	},
 	keyword: {
 		type: String,
-		required: true
+		required: true,
 	},
 	deleteTrigger: {
 		type: Boolean,
 		required: true,
-		default: false
+		default: false,
 	},
 	caseSensitive: {
 		type: Boolean,
-		required: true
+		required: true,
 	},
 	regexTrigger: {
 		type: Boolean,
-		required: true
-	}
-})
+		required: true,
+	},
+});
 
 class TriggerClass {
 	static createNew(
@@ -41,7 +42,7 @@ class TriggerClass {
 		keyword,
 		originalMessageId,
 		caseSensitive,
-		regexTrigger
+		regexTrigger,
 	) {
 		return createNew(
 			Trigger,
@@ -49,24 +50,24 @@ class TriggerClass {
 			keyword,
 			originalMessageId,
 			caseSensitive,
-			regexTrigger
-		)
+			regexTrigger,
+		);
 	}
 	static removeOne(groupId, keyword) {
-		return removeOne(Trigger, groupId, keyword)
+		return removeOne(Trigger, groupId, keyword);
 	}
 	static getForGroup(groupId) {
-		return getForGroup(Trigger, groupId)
+		return getForGroup(Trigger, groupId);
 	}
 	static triggerResponse(groupId, text) {
-		return triggerResponse(Trigger, groupId, text)
+		return triggerResponse(Trigger, groupId, text);
 	}
 	send(replyMessageId) {
-		return sendTriggerMessage.bind(this)(replyMessageId)
+		return sendTriggerMessage.bind(this)(replyMessageId);
 	}
 }
 
-TriggerSchema.loadClass(TriggerClass)
-const Trigger = model('Trigger', TriggerSchema)
+TriggerSchema.loadClass(TriggerClass);
+const Trigger = model("Trigger", TriggerSchema);
 
-export { Trigger }
+export { Trigger };

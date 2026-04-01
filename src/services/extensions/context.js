@@ -3,12 +3,12 @@ function sendTextMessage(ctx, text, extra = {}) {
 		ctx.chat.id,
 		text,
 		Object.assign(extra, {
-			parse_mode: 'HTML',
-			disable_web_page_preview: true
-		})
-	)
+			parse_mode: "HTML",
+			disable_web_page_preview: true,
+		}),
+	);
 }
 
-const showPopup = (ctx, text) => ctx.answerCbQuery(text, true)
+const showPopup = (ctx, text) => ctx.answerCbQuery(text, true);
 
-export { showPopup, sendTextMessage }
+export { sendTextMessage, showPopup };
